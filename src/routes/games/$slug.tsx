@@ -116,10 +116,10 @@ function HostGameForm({ gameMode, gameTitle }: { gameMode: GameMode; gameTitle: 
                     playClickSound();
                     setDiscussionSeconds(sec);
                   }}
-                  className={`flex-1 py-1 rounded-md text-[10px] font-bold border transition-colors cursor-pointer ${
+                  className={`flex-1 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer ${
                     discussionSeconds === sec
-                      ? "bg-primary text-black border-primary"
-                      : "bg-white/5 border-white/10 text-gray-400 hover:text-white"
+                      ? "liquid-glass-primary text-white border-primary/50 shadow-[0_0_12px_var(--color-primary-glow)]"
+                      : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
                   }`}
                 >
                   {sec}s
@@ -129,7 +129,7 @@ function HostGameForm({ gameMode, gameTitle }: { gameMode: GameMode; gameTitle: 
           </div>
         </div>
 
-        <div className="mt-5 p-3 rounded-xl bg-white/5 border border-white/10 text-[11px] text-gray-400 flex items-center gap-2">
+        <div className="mt-5 p-3 rounded-2xl bg-white/5 border border-white/10 text-[11px] text-gray-400 flex items-center gap-2">
           <Lock className="w-3.5 h-3.5 text-primary shrink-0" />
           <span>Game mode cannot be altered inside room to preserve fair play.</span>
         </div>
@@ -138,7 +138,7 @@ function HostGameForm({ gameMode, gameTitle }: { gameMode: GameMode; gameTitle: 
           type="submit"
           variant="hero"
           size="xl"
-          className="mt-6 w-full font-bold uppercase tracking-wider shadow-xl shadow-primary/20"
+          className="mt-6 w-full rounded-full font-bold uppercase tracking-wider liquid-glass-primary text-white shadow-[0_0_25px_var(--color-primary-glow)] hover:scale-[1.02] active:scale-95 transition-all"
           disabled={isPending}
         >
           {isPending ? "Creating Room…" : `Host ${gameTitle}`}
@@ -233,7 +233,7 @@ function JoinGameForm() {
       <Button
         type="submit"
         size="xl"
-        className="mt-6 w-full font-bold uppercase tracking-wider"
+        className="mt-6 w-full rounded-full font-bold uppercase tracking-wider border border-white/20 bg-white/10 hover:bg-white/15 text-white hover:border-white/30 backdrop-blur-md hover:scale-[1.02] active:scale-95 transition-all shadow-md"
         disabled={isPending}
       >
         {isPending ? "Connecting…" : "Join Room"}
@@ -310,15 +310,15 @@ function GameDetailPage() {
                   {game.instructions.map((inst) => (
                     <div
                       key={inst.step}
-                      className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 relative overflow-hidden"
+                      className="liquid-glass-card border border-white/15 rounded-2xl p-5 sm:p-6 relative overflow-hidden shadow-md"
                     >
-                      <div className="text-4xl font-black text-white/5 absolute -top-2 -right-2 select-none">
+                      <div className="text-4xl sm:text-5xl font-black text-white/5 absolute -top-1 -right-1 select-none font-mono">
                         {inst.step}
                       </div>
-                      <h3 className="text-base sm:text-lg font-bold text-primary mb-2 relative z-10">
+                      <h3 className="text-base sm:text-lg font-bold text-sky-400 mb-2 relative z-10">
                         {inst.step}. {inst.title}
                       </h3>
-                      <p className="text-gray-400 text-xs sm:text-sm relative z-10">
+                      <p className="text-gray-300 text-xs sm:text-sm leading-relaxed relative z-10">
                         {inst.description}
                       </p>
                     </div>
@@ -327,11 +327,11 @@ function GameDetailPage() {
               </section>
             )}
 
-            <section className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 sm:p-6 flex items-start gap-3 sm:gap-4">
+            <section className="liquid-glass-card border border-red-500/25 bg-red-500/10 rounded-2xl p-5 sm:p-6 flex items-start gap-3 sm:gap-4 shadow-md">
               <ShieldAlert className="w-5 h-5 sm:w-6 sm:h-6 text-red-400 shrink-0 mt-0.5" />
               <div>
                 <h3 className="text-red-400 font-bold mb-1 text-sm sm:text-base">Privacy Notice</h3>
-                <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
                   Secret roles and words are strictly protected. Ensure nobody can see your screen
                   when you reveal your card. Role distribution logic is securely handled on the
                   server.

@@ -384,25 +384,27 @@ function HomePage() {
             <h2 className="text-xl sm:text-3xl font-black uppercase tracking-widest text-gray-500 mb-6 sm:mb-12">
               Odd One Out Mechanics
             </h2>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-12 w-full max-w-4xl">
-              <div className="flex-1 bg-white/5 border border-white/10 p-8 w-full">
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 block">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-10 w-full max-w-4xl">
+              <div className="flex-1 liquid-glass-card rounded-2xl sm:rounded-3xl border border-white/15 p-6 sm:p-8 w-full shadow-lg">
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 sm:mb-6 block">
                   Normal Players
                 </span>
                 <div className="space-y-3">
                   {["APPLE", "APPLE", "APPLE"].map((word, idx) => (
-                    <div key={idx} className="bg-zinc-800 py-3 font-black text-xl tracking-widest">
+                    <div key={idx} className="bg-white/5 border border-white/10 rounded-xl py-3 font-black text-lg sm:text-xl tracking-widest text-slate-200">
                       {word}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="text-4xl font-black text-primary shrink-0">VS</div>
-              <div className="flex-1 bg-primary/10 border border-primary/30 p-8 w-full shadow-[0_0_50px_-15px_var(--tw-colors-primary)]">
-                <span className="text-xs font-bold text-primary uppercase tracking-widest mb-6 block">
+              <div className="text-xl sm:text-2xl font-black text-primary px-4 py-2 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md shrink-0">
+                VS
+              </div>
+              <div className="flex-1 liquid-glass-card rounded-2xl sm:rounded-3xl border border-primary/30 p-6 sm:p-8 w-full shadow-[0_0_50px_-15px_var(--tw-colors-primary)]">
+                <span className="text-xs font-bold text-primary uppercase tracking-widest mb-4 sm:mb-6 block">
                   The Imposter
                 </span>
-                <div className="bg-primary text-white py-10 font-black text-3xl tracking-widest scale-110 shadow-2xl">
+                <div className="bg-primary text-white py-8 sm:py-10 font-black text-2xl sm:text-3xl tracking-widest rounded-xl shadow-2xl scale-105">
                   BANANA
                 </div>
               </div>
@@ -420,36 +422,38 @@ function HomePage() {
             <h2 className="text-xl sm:text-3xl font-black uppercase tracking-widest text-gray-500 mb-6 sm:mb-12">
               Word Chameleon Mechanics
             </h2>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-12 w-full max-w-4xl mb-12">
-              <div className="flex-1 bg-white/5 border border-white/10 p-8 w-full">
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 block">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-10 w-full max-w-4xl mb-8 sm:mb-12">
+              <div className="flex-1 liquid-glass-card rounded-2xl sm:rounded-3xl border border-white/15 p-6 sm:p-8 w-full shadow-lg">
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 sm:mb-6 block">
                   Normal Players
                 </span>
                 <div className="space-y-3">
                   {["SPIDER-MAN", "SPIDER-MAN"].map((word, idx) => (
-                    <div key={idx} className="bg-zinc-800 py-3 font-black text-xl tracking-widest">
+                    <div key={idx} className="bg-white/5 border border-white/10 rounded-xl py-3 font-black text-lg sm:text-xl tracking-widest text-slate-200">
                       {word}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="text-4xl font-black text-emerald-500 shrink-0">VS</div>
-              <div className="flex-1 bg-emerald-500/10 border border-emerald-500/30 p-8 w-full shadow-[0_0_50px_-15px_#10b981]">
-                <span className="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-6 block">
+              <div className="text-xl sm:text-2xl font-black text-emerald-400 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-md shrink-0">
+                VS
+              </div>
+              <div className="flex-1 liquid-glass-card rounded-2xl sm:rounded-3xl border border-emerald-500/30 p-6 sm:p-8 w-full shadow-[0_0_50px_-15px_#10b981]">
+                <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-4 sm:mb-6 block">
                   The Chameleon
                 </span>
-                <div className="bg-emerald-500 text-black py-10 font-black text-xl tracking-widest scale-110 shadow-2xl">
+                <div className="bg-emerald-600 text-white py-8 sm:py-10 font-black text-base sm:text-xl tracking-widest rounded-xl shadow-2xl scale-105">
                   Category: TOYS & CARTOONS
                 </div>
               </div>
             </div>
             <div className="max-w-2xl text-center">
-              <h3 className="text-3xl font-black uppercase mb-4">
+              <h3 className="text-2xl sm:text-3xl font-black uppercase mb-3 sm:mb-4">
                 Caught? <span className="text-gray-500">Not necessarily.</span>
               </h3>
-              <p className="text-xl text-gray-400">
+              <p className="text-base sm:text-xl text-gray-400">
                 Guess the secret word at the end and{" "}
-                <strong className="text-emerald-500">steal the win.</strong>
+                <strong className="text-emerald-400 font-bold">steal the win.</strong>
               </p>
             </div>
           </motion.div>
@@ -472,20 +476,23 @@ function HomePage() {
               More premium games are actively in development.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {[1, 2, 3].map((num) => (
+              {[
+                { title: "Undercover Agent", genre: "Secret Roles & Infiltration" },
+                { title: "Word Trap", genre: "Taboo & Speed Deductions" },
+                { title: "Spyfall Echo", genre: "Location Bluff & Interrogation" },
+              ].map((item, idx) => (
                 <div
-                  key={num}
-                  className="aspect-[3/4] bg-zinc-900 border border-white/5 flex flex-col items-center justify-center relative overflow-hidden group"
+                  key={idx}
+                  className="aspect-[3/4] liquid-glass-card border border-white/15 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center relative overflow-hidden group hover:border-white/30 transition-all duration-300 p-6 shadow-lg"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-50" />
-                  <span className="text-6xl font-black text-white/5 group-hover:text-white/10 transition-colors">
-                    ?
-                  </span>
-                  <div className="absolute bottom-6 left-0 right-0 text-center">
-                    <span className="text-xs font-bold tracking-widest uppercase text-gray-500">
-                      Coming Soon
-                    </span>
+                  <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Sparkles className="w-8 h-8 text-white/40 group-hover:text-primary transition-colors" />
                   </div>
+                  <h4 className="font-bold text-lg text-white mb-1">{item.title}</h4>
+                  <p className="text-xs text-gray-400 font-medium mb-4">{item.genre}</p>
+                  <span className="px-3.5 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase bg-primary/20 text-blue-300 border border-primary/30">
+                    Coming Soon
+                  </span>
                 </div>
               ))}
             </div>
@@ -546,19 +553,21 @@ function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6"
+            className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 items-center"
           >
             <Link
               to="/games"
-              className="bg-primary text-white px-8 sm:px-12 py-4 sm:py-6 font-black uppercase tracking-widest text-sm sm:text-lg hover:bg-primary-dark transition-colors shadow-[0_0_40px_-10px_var(--tw-colors-primary)]"
+              className="w-full sm:w-auto rounded-full liquid-glass-primary text-white px-8 sm:px-12 py-3.5 sm:py-4 font-bold tracking-wide text-sm sm:text-base shadow-[0_0_30px_var(--color-primary-glow)] hover:scale-105 active:scale-95 transition-all inline-flex items-center justify-center gap-2"
             >
+              <Play className="w-4 h-4 fill-white" />
               Create A Room
             </Link>
             <Link
               to="/games"
-              className="border border-white/20 px-8 sm:px-12 py-4 sm:py-6 font-black uppercase tracking-widest text-sm sm:text-lg hover:bg-white/10 transition-colors"
+              className="w-full sm:w-auto rounded-full border border-white/20 bg-white/5 backdrop-blur-md px-8 sm:px-12 py-3.5 sm:py-4 font-bold tracking-wide text-sm sm:text-base text-white hover:bg-white/10 hover:border-white/30 transition-all inline-flex items-center justify-center gap-2"
             >
-              Explore Games
+              Explore All Games
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
         </div>
