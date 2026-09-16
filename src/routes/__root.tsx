@@ -218,7 +218,7 @@ function RootComponent() {
                   {!isInRoom && (
                     <Link
                       to="/games"
-                      className="inline-flex h-9 sm:h-10 items-center justify-center rounded-full bg-white px-4 sm:px-6 text-xs sm:text-sm font-bold text-black transition-transform duration-300 hover:scale-105 hover:bg-gray-200 shrink-0"
+                      className="inline-flex h-9 sm:h-10 items-center justify-center rounded-full liquid-glass-primary px-5 sm:px-6 text-xs sm:text-sm font-black uppercase tracking-wider text-white shadow-[0_0_20px_var(--color-primary-glow)] transition-all hover:scale-105 active:scale-95 shrink-0"
                     >
                       PLAY NOW
                     </Link>
@@ -241,25 +241,29 @@ function RootComponent() {
 
           {/* Native-Feel Mobile App Bottom Navigation Dock */}
           {!isInRoom && (
-            <nav className="fixed bottom-0 left-0 right-0 z-50 sm:hidden border-t border-white/15 bg-black/90 backdrop-blur-2xl px-4 py-2 pb-safe shadow-[0_-4px_24px_rgba(0,0,0,0.7)]">
+            <nav className="fixed bottom-0 left-0 right-0 z-50 sm:hidden border-t border-white/20 bg-zinc-950/90 backdrop-blur-2xl px-4 py-2 pb-safe shadow-[0_-8px_32px_rgba(0,0,0,0.8)]">
               <div className="flex items-center justify-around max-w-md mx-auto">
                 <Link
                   to="/"
-                  className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-colors ${
-                    pathname === "/" ? "text-primary" : "text-gray-400 hover:text-white"
+                  className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
+                    pathname === "/"
+                      ? "text-primary bg-primary/15 border border-primary/30 shadow-[0_0_12px_var(--color-primary-glow)]"
+                      : "text-gray-400 hover:text-white"
                   }`}
                 >
-                  <Home className="w-5 h-5" />
+                  <Home className="w-4.5 h-4.5" />
                   <span className="text-[10px] font-bold tracking-wider">Home</span>
                 </Link>
 
                 <Link
                   to="/games"
-                  className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-colors ${
-                    pathname.startsWith("/games") ? "text-primary" : "text-gray-400 hover:text-white"
+                  className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
+                    pathname.startsWith("/games")
+                      ? "text-primary bg-primary/15 border border-primary/30 shadow-[0_0_12px_var(--color-primary-glow)]"
+                      : "text-gray-400 hover:text-white"
                   }`}
                 >
-                  <Gamepad2 className="w-5 h-5" />
+                  <Gamepad2 className="w-4.5 h-4.5" />
                   <span className="text-[10px] font-bold tracking-wider">Games</span>
                 </Link>
 
@@ -267,7 +271,7 @@ function RootComponent() {
                   href="/#categories"
                   className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-gray-400 hover:text-white transition-colors"
                 >
-                  <Layers className="w-5 h-5" />
+                  <Layers className="w-4.5 h-4.5" />
                   <span className="text-[10px] font-bold tracking-wider">Themes</span>
                 </a>
 
@@ -275,8 +279,8 @@ function RootComponent() {
                   to="/games"
                   className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-primary hover:text-white transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-[0_0_12px_var(--color-primary-glow)]">
-                    <Sparkles className="w-4 h-4 fill-current" />
+                  <div className="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-[0_0_14px_var(--color-primary-glow)]">
+                    <Sparkles className="w-3.5 h-3.5 fill-current" />
                   </div>
                   <span className="text-[10px] font-black tracking-wider text-primary">Play</span>
                 </Link>

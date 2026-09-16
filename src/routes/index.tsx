@@ -138,16 +138,16 @@ function HomePage() {
               The premier platform for social deduction and party games. Gather your friends, share a
               code, and start playing instantly on any device.
             </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3.5 sm:gap-4 w-full sm:w-auto">
               <Link
                 to="/games"
-                className="flex items-center justify-center gap-2 rounded-none bg-primary px-8 sm:px-10 py-4 sm:py-5 text-xs sm:text-sm font-black uppercase tracking-widest text-white shadow-lg shadow-primary/30 transition-transform hover:scale-105 hover:bg-primary-dark"
+                className="flex items-center justify-center gap-2.5 rounded-full liquid-glass-primary px-8 sm:px-10 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-widest text-white shadow-[0_0_30px_var(--color-primary-glow)] transition-all hover:scale-105 active:scale-95"
               >
                 Play Now <Play className="w-4 h-4 fill-current" />
               </Link>
               <Link
                 to="/games"
-                className="flex items-center justify-center gap-2 rounded-none border border-white/20 bg-white/5 backdrop-blur-md px-8 sm:px-10 py-4 sm:py-5 text-xs sm:text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-white/10"
+                className="flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md px-8 sm:px-10 py-3.5 sm:py-4 text-xs sm:text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-white/35 active:scale-95 shadow-md"
               >
                 Explore Games
               </Link>
@@ -174,38 +174,44 @@ function HomePage() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeUp}
-          className="bg-zinc-900 border border-white/10 p-5 sm:p-8 md:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 relative overflow-hidden rounded-xl sm:rounded-none"
+          className="liquid-glass-card border border-white/20 p-5 sm:p-8 md:p-10 shadow-2xl flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 sm:gap-8 relative overflow-hidden rounded-2xl sm:rounded-3xl"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-transparent to-purple-600/10 pointer-events-none" />
           <div className="relative z-10">
-            <h2 className="text-xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight mb-1 sm:mb-2">
-              Got a group? Start a room.
+            <div className="flex items-center gap-2 mb-2">
+              <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-primary">
+                Instant Multiplayer
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-3xl font-black uppercase tracking-tight mb-1 sm:mb-2 text-white">
+              Got a group? Start a room in seconds.
             </h2>
-            <p className="text-gray-400 font-medium text-sm sm:text-base">
-              Create a room → Share the code → Everyone joins → Start playing.
+            <p className="text-gray-400 font-medium text-xs sm:text-sm max-w-xl">
+              Create a room, share the code or QR, and play instantly on phones with zero downloads.
             </p>
           </div>
-          <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
-            <form onSubmit={handleQuickJoin} className="flex gap-2">
+          <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto shrink-0">
+            <form onSubmit={handleQuickJoin} className="flex gap-2 w-full sm:w-auto">
               <input
                 type="text"
                 value={quickCode}
                 onChange={(e) => setQuickCode(e.target.value.toUpperCase())}
                 placeholder="ROOM CODE"
                 maxLength={6}
-                className="code-chip px-4 py-3 bg-black/60 border border-white/20 text-primary placeholder:text-gray-500 font-mono text-center sm:text-left text-sm font-black tracking-widest uppercase rounded-lg sm:rounded-none focus:outline-none focus:border-primary w-36 sm:w-40"
+                className="code-chip px-4 py-2.5 bg-black/60 border border-white/20 text-primary placeholder:text-gray-500 font-mono text-center sm:text-left text-sm font-black tracking-widest uppercase rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40 flex-1 sm:w-44 transition-all"
               />
               <button
                 type="submit"
                 disabled={!quickCode.trim()}
-                className="flex items-center justify-center gap-1.5 bg-primary text-white px-5 py-3 font-black uppercase tracking-widest text-xs hover:bg-primary-dark transition-colors disabled:opacity-40 rounded-lg sm:rounded-none cursor-pointer shadow-md shadow-primary/20"
+                className="flex items-center justify-center gap-1.5 bg-primary text-white px-5 py-2.5 font-black uppercase tracking-wider text-xs hover:bg-primary-dark transition-all disabled:opacity-40 rounded-xl cursor-pointer shadow-md shadow-primary/20 shrink-0 active:scale-95"
               >
                 Join <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </form>
             <Link
               to="/games"
-              className="flex items-center justify-center gap-2 border border-white/20 bg-white/5 px-6 py-3 font-black uppercase tracking-widest text-xs text-white hover:bg-white/10 transition-colors rounded-lg sm:rounded-none"
+              className="flex items-center justify-center gap-2 border border-white/20 bg-white/5 px-6 py-2.5 font-black uppercase tracking-wider text-xs text-white hover:bg-white/10 hover:border-white/35 transition-all rounded-xl active:scale-95 text-center"
             >
               Browse Games
             </Link>
@@ -263,25 +269,29 @@ function HomePage() {
               Play Your Way
             </h2>
           </motion.div>
-          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             {[
-              "Social Deduction",
-              "Party",
-              "Word Games",
-              "Strategy",
-              "Casual",
-              "Mystery",
+              { name: "Social Deduction", icon: Users, color: "text-blue-400" },
+              { name: "Party", icon: Sparkles, color: "text-amber-400" },
+              { name: "Word Games", icon: BookOpen, color: "text-sky-400" },
+              { name: "Strategy", icon: Target, color: "text-rose-400" },
+              { name: "Casual", icon: Lightbulb, color: "text-emerald-400" },
+              { name: "Mystery", icon: HelpCircle, color: "text-purple-400" },
             ].map((cat, idx) => (
               <motion.div
-                key={cat}
+                key={cat.name}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group relative aspect-square bg-zinc-900 border border-white/10 flex items-center justify-center p-3 sm:p-6 text-center hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer rounded-lg sm:rounded-none"
+                transition={{ delay: idx * 0.06 }}
+                onClick={() => navigate({ to: "/games" })}
+                className="group relative aspect-square liquid-glass-card border border-white/15 flex flex-col items-center justify-center p-4 text-center hover:border-white/40 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer rounded-2xl sm:rounded-3xl shadow-lg"
               >
-                <span className="font-black uppercase tracking-wider text-[10px] sm:text-sm">
-                  {cat}
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-3 group-hover:bg-white/10 transition-colors">
+                  <cat.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${cat.color} group-hover:scale-110 transition-transform duration-300`} />
+                </div>
+                <span className="font-bold text-white text-xs sm:text-sm tracking-tight leading-snug">
+                  {cat.name}
                 </span>
               </motion.div>
             ))}
