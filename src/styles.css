@@ -1,0 +1,502 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * The :root and .dark blocks define the actual color values using oklch.
+ * All colors MUST use oklch format.
+ *
+ * To add a new semantic color:
+ * 1. Add the variable to :root (light value) and .dark (dark value)
+ * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ */
+
+@theme inline {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-odd: var(--odd);
+  --color-odd-foreground: var(--odd-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 1rem;
+  --background: oklch(12% 0.02 260);
+  --foreground: oklch(98% 0.005 250);
+  --card: oklch(17% 0.025 260);
+  --card-foreground: oklch(98% 0.005 250);
+  --popover: oklch(17% 0.025 260);
+  --popover-foreground: oklch(98% 0.005 250);
+  --primary: oklch(85% 0.22 142);
+  --primary-foreground: oklch(12% 0.03 142);
+  --secondary: oklch(22% 0.03 260);
+  --secondary-foreground: oklch(98% 0.005 250);
+  --muted: oklch(22% 0.025 260);
+  --muted-foreground: oklch(72% 0.02 258);
+  --accent: oklch(85% 0.22 142);
+  --accent-foreground: oklch(12% 0.03 142);
+  --odd: oklch(72% 0.22 25);
+  --odd-foreground: oklch(98% 0.01 60);
+  --destructive: oklch(62% 0.22 22);
+  --destructive-foreground: oklch(98% 0.005 60);
+  --border: oklch(100% 0 0 / 0.12);
+  --input: oklch(100% 0 0 / 0.14);
+  --ring: oklch(85% 0.22 142);
+  --shadow-pop: 0 12px 36px -8px oklch(85% 0.22 142 / 0.4);
+  --gradient-stage:
+    radial-gradient(100rem 60rem at 50% -15%, oklch(85% 0.22 142 / 0.12), transparent 65%),
+    radial-gradient(80rem 50rem at 90% 100%, oklch(72% 0.22 25 / 0.1), transparent 70%);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-primary: oklch(0.208 0.042 265.755);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.968 0.007 247.896);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: oklch(0.704 0.04 256.788);
+}
+
+.dark {
+  --background: oklch(12% 0.02 260);
+  --foreground: oklch(98% 0.005 250);
+  --card: oklch(17% 0.025 260);
+  --card-foreground: oklch(98% 0.005 250);
+  --popover: oklch(17% 0.025 260);
+  --popover-foreground: oklch(98% 0.005 250);
+  --primary: oklch(85% 0.22 142);
+  --primary-foreground: oklch(12% 0.03 142);
+  --secondary: oklch(22% 0.03 260);
+  --secondary-foreground: oklch(98% 0.005 250);
+  --muted: oklch(22% 0.025 260);
+  --muted-foreground: oklch(72% 0.02 258);
+  --accent: oklch(85% 0.22 142);
+  --accent-foreground: oklch(12% 0.03 142);
+  --destructive: oklch(62% 0.22 22);
+  --destructive-foreground: oklch(98% 0.005 60);
+  --border: oklch(100% 0 0 / 0.12);
+  --input: oklch(100% 0 0 / 0.14);
+  --ring: oklch(85% 0.22 142);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(100% 0 0 / 0.12);
+  --sidebar-ring: oklch(85% 0.22 142);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    background-image: var(--gradient-stage);
+    background-attachment: fixed;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  button, a, input, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  input, select, textarea {
+    font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+  }
+
+  @media (min-width: 640px) {
+    input, select, textarea {
+      font-size: inherit;
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.pt-safe {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.mb-safe {
+  margin-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.panel {
+  border-radius: var(--radius-2xl);
+  border: 1px solid color-mix(in oklab, var(--color-border) 80%, white 20%);
+  background: color-mix(in oklab, var(--color-card) 75%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 40px -10px oklch(0% 0 0 / 0.45), inset 0 1px oklch(100% 0 0 / 0.12);
+}
+
+.glass-pill {
+  background: color-mix(in oklab, var(--color-card) 80%, transparent);
+  border: 1px solid oklch(100% 0 0 / 0.15);
+  border-radius: 9999px;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 36px -8px oklch(0% 0 0 / 0.6), inset 0 1px oklch(100% 0 0 / 0.2);
+}
+
+.neon-card {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-accent);
+  background: color-mix(in oklab, var(--color-card) 90%, var(--color-accent) 10%);
+  box-shadow: 0 0 25px -4px var(--color-accent), inset 0 1px 0 0 oklch(100% 0 0 / 0.3);
+}
+
+@utility code-chip {
+  font-family: var(--font-display);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+@keyframes word-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) rotate(-1.5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@utility animate-word-pop {
+  animation: word-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Mafia Theme System */
+:root {
+  --mafia-night: oklch(8% 0.025 270);
+  --mafia-night-card: oklch(13% 0.03 270);
+  --mafia-surface: oklch(15% 0.025 265);
+  --mafia-red: oklch(55% 0.24 18);
+  --mafia-red-glow: oklch(55% 0.24 18 / 0.35);
+  --mafia-red-soft: oklch(55% 0.24 18 / 0.12);
+  --mafia-gold: oklch(82% 0.18 85);
+  --mafia-gold-glow: oklch(82% 0.18 85 / 0.3);
+  --mafia-green: oklch(72% 0.19 155);
+  --mafia-green-glow: oklch(72% 0.19 155 / 0.3);
+  --mafia-blue: oklch(65% 0.18 250);
+  --mafia-blue-glow: oklch(65% 0.18 250 / 0.3);
+}
+
+.mafia-bg-night {
+  background: var(--mafia-night);
+  background-image: radial-gradient(120rem 60rem at 50% -20%, oklch(20% 0.08 270 / 0.4), transparent 70%),
+    radial-gradient(80rem 40rem at 80% 110%, oklch(55% 0.24 18 / 0.08), transparent 60%);
+}
+
+.mafia-bg-morning {
+  background-color: oklch(10% 0.02 50);
+  background-image: radial-gradient(100rem 50rem at 50% -10%, oklch(82% 0.18 85 / 0.15), transparent 60%),
+    radial-gradient(80rem 40rem at 20% 120%, oklch(55% 0.24 18 / 0.06), transparent 50%);
+}
+
+.mafia-bg-discuss {
+  background: oklch(9% 0.015 260) radial-gradient(100rem 50rem at 50% 0, oklch(65% 0.18 250 / 0.1), transparent 60%);
+}
+
+.mafia-bg-vote {
+  background: oklch(7% 0.02 15) radial-gradient(100rem 50rem at 50% -10%, oklch(55% 0.24 18 / 0.18), transparent 60%);
+}
+
+.mafia-bg-gameover {
+  background: oklch(6% 0.01 260) radial-gradient(120rem 60rem at 50% 30%, oklch(82% 0.18 85 / 0.12), transparent 70%);
+}
+
+.mafia-panel {
+  border-radius: var(--radius-2xl, 1rem);
+  backdrop-filter: blur(24px) saturate(1.3);
+  background: oklch(14% 0.025 270 / 0.8);
+  border: 1px solid oklch(100% 0 0 / 0.08);
+  box-shadow: 0 16px 48px -12px oklch(0% 0 0 / 0.6), inset 0 1px oklch(100% 0 0 / 0.08);
+}
+
+.mafia-card {
+  border-radius: var(--radius-xl, 0.75rem);
+  backdrop-filter: blur(12px);
+  background: oklch(12% 0.02 270 / 0.7);
+  border: 1px solid oklch(100% 0 0 / 0.06);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mafia-card:hover {
+  background: oklch(16% 0.03 270 / 0.8);
+  border-color: oklch(100% 0 0 / 0.12);
+  transform: translateY(-1px);
+}
+
+.mafia-card-selected {
+  box-shadow: 0 0 20px -4px var(--mafia-red-glow), inset 0 1px 0 0 oklch(100% 0 0 / 0.1);
+  border-color: var(--mafia-red) !important;
+  background: oklch(55% 0.24 18 / 0.12) !important;
+}
+
+.mafia-card-green {
+  box-shadow: 0 0 20px -4px var(--mafia-green-glow);
+  border-color: var(--mafia-green) !important;
+  background: oklch(72% 0.19 155 / 0.1) !important;
+}
+
+.mafia-card-blue {
+  box-shadow: 0 0 20px -4px var(--mafia-blue-glow);
+  border-color: var(--mafia-blue) !important;
+  background: oklch(65% 0.18 250 / 0.1) !important;
+}
+
+.mafia-btn {
+  border-radius: var(--radius-xl, 0.75rem);
+  font-weight: 800;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  border: 1px solid oklch(100% 0 0 / 0.1);
+  padding: 1rem 2rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mafia-btn:active {
+  transform: scale(0.97);
+}
+
+.mafia-btn-red {
+  color: oklch(95% 0.01 60);
+  box-shadow: 0 8px 24px -6px var(--mafia-red-glow);
+  background: linear-gradient(135deg, oklch(50% 0.22 18), oklch(42% 0.2 15));
+  border-color: oklch(60% 0.22 18 / 0.3);
+}
+
+.mafia-btn-red:hover {
+  box-shadow: 0 12px 32px -6px var(--mafia-red-glow);
+  background: linear-gradient(135deg, oklch(55% 0.24 18), oklch(46% 0.22 15));
+  transform: translateY(-1px);
+}
+
+.mafia-btn-ghost {
+  color: oklch(60% 0.02 260);
+  background: oklch(100% 0 0 / 0.05);
+  border-color: oklch(100% 0 0 / 0.06);
+}
+
+.mafia-btn-ghost:hover {
+  color: oklch(85% 0.02 260);
+  background: oklch(100% 0 0 / 0.1);
+}
+
+.mafia-btn-gold {
+  color: oklch(10% 0.02 85);
+  box-shadow: 0 8px 24px -6px var(--mafia-gold-glow);
+  background: linear-gradient(135deg, oklch(82% 0.18 85), oklch(74% 0.16 80));
+  border-color: oklch(85% 0.18 85 / 0.4);
+}
+
+.mafia-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mafia-role-mafia {
+  background: var(--mafia-red-soft);
+  color: var(--mafia-red);
+  border: 1px solid oklch(55% 0.24 18 / 0.3);
+}
+
+.mafia-role-doctor {
+  background: oklch(72% 0.19 155 / 0.1);
+  color: var(--mafia-green);
+  border: 1px solid oklch(72% 0.19 155 / 0.3);
+}
+
+.mafia-role-police {
+  background: oklch(65% 0.18 250 / 0.1);
+  color: var(--mafia-blue);
+  border: 1px solid oklch(65% 0.18 250 / 0.3);
+}
+
+.mafia-role-civilian {
+  background: oklch(100% 0 0 / 0.06);
+  color: oklch(80% 0.02 260);
+  border: 1px solid oklch(100% 0 0 / 0.1);
+}
+
+@keyframes mafia-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mafia-scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes mafia-pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes mafia-glow-breathe {
+  0%, 100% {
+    box-shadow: 0 0 16px -4px var(--mafia-red-glow);
+  }
+  50% {
+    box-shadow: 0 0 28px 2px var(--mafia-red-glow);
+  }
+}
+
+@keyframes mafia-moon-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+.animate-mafia-up {
+  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) both mafia-fade-up;
+}
+
+.animate-mafia-up-delay-1 {
+  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both mafia-fade-up;
+}
+
+.animate-mafia-up-delay-2 {
+  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both mafia-fade-up;
+}
+
+.animate-mafia-up-delay-3 {
+  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both mafia-fade-up;
+}
+
+.animate-mafia-scale {
+  animation: 0.4s cubic-bezier(0.16, 1, 0.3, 1) both mafia-scale-in;
+}
+
+.animate-mafia-pulse {
+  animation: 2s ease-in-out infinite mafia-pulse-soft;
+}
+
+.animate-mafia-glow {
+  animation: 3s ease-in-out infinite mafia-glow-breathe;
+}
+
+.animate-mafia-moon {
+  animation: 4s ease-in-out infinite mafia-moon-float;
+}
+
+@keyframes float-up-fade {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-260px) scale(1.3);
+    opacity: 0;
+  }
+}
+
+.animate-float-up {
+  animation: float-up-fade 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
