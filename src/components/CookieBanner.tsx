@@ -51,32 +51,31 @@ export function CookieBanner() {
     <div
       role="region"
       aria-label="Cookie and Privacy Consent"
-      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 animate-in fade-in slide-in-from-bottom-5 duration-300"
+      className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm z-50 animate-in fade-in slide-in-from-bottom-3 duration-300"
     >
-      <div className="rounded-2xl border border-white/15 bg-zinc-950/95 p-5 shadow-2xl backdrop-blur-2xl text-white">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
-            <Cookie className="w-4 h-4" /> Cookie & Advertising Notice
+      <div className="liquid-glass-card rounded-2xl border border-white/20 bg-zinc-950/90 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl text-white">
+        <div className="flex items-center justify-between gap-3 mb-2">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+            <Cookie className="w-4 h-4" /> Cookie & Ad Notice
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-400 hover:text-white transition-colors p-1"
+            className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
             aria-label="Close notice"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <p className="text-xs text-gray-300 leading-relaxed mb-4">
-          Secret Word Room uses cookies to maintain game sessions and show relevant ads via Google AdSense. In
-          compliance with GDPR and ePrivacy regulations, you can customize your advertising consent preferences.
+        <p className="text-[11px] sm:text-xs text-gray-300 leading-relaxed">
+          We use cookies for game sessions and Google AdSense ads in compliance with GDPR & ePrivacy regulations.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 mt-3">
           <Button
             size="sm"
             onClick={() => handleConsent("all")}
-            className="bg-primary text-white hover:bg-primary-dark font-bold text-xs uppercase tracking-wider flex-1"
+            className="h-8.5 rounded-xl bg-primary text-white hover:bg-primary-dark font-bold text-xs uppercase tracking-wider shadow-md"
           >
             <ShieldCheck className="w-3.5 h-3.5 mr-1" /> Accept All
           </Button>
@@ -84,13 +83,13 @@ export function CookieBanner() {
             size="sm"
             variant="outline"
             onClick={() => handleConsent("essential")}
-            className="border-white/20 text-gray-300 hover:text-white hover:bg-white/10 text-xs flex-1"
+            className="h-8.5 rounded-xl border-white/20 bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 font-semibold text-xs"
           >
             Essential Only
           </Button>
         </div>
 
-        <div className="mt-3 text-[11px] text-gray-400 flex items-center justify-between pt-2 border-t border-white/10">
+        <div className="mt-2.5 text-[10px] text-gray-400 flex items-center justify-between pt-2 border-t border-white/10">
           <Link to="/privacy" className="underline hover:text-white transition-colors">
             Privacy Policy
           </Link>

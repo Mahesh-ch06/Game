@@ -129,7 +129,16 @@ function RoomPage() {
   }
 
   if (expired) {
-    return <ExpiredRoom code={code} message={expiredMessage ?? undefined} />;
+    return (
+      <ExpiredRoom
+        code={code}
+        message={expiredMessage ?? undefined}
+        onRetry={() => {
+          setExpired(false);
+          setExpiredMessage(null);
+        }}
+      />
+    );
   }
 
   if (!token) {
@@ -160,27 +169,43 @@ function RoomPage() {
   );
 }
 
-function ExpiredRoom({ code, message }: { code: string; message?: string | undefined }) {
+function ExpiredRoom({
+  code,
+  message,
+  onRetry,
+}: {
+  code: string;
+  message?: string | undefined;
+  onRetry?: () => void;
+}) {
   return (
     <main className="flex min-h-screen items-center justify-center px-4 text-white">
-      <div className="panel max-w-md p-8 text-center animate-slide-up">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10 text-2xl text-red-400 mb-4">
-          <AlertTriangle className="w-8 h-8" />
+      <div className="panel max-w-md w-full p-6 sm:p-8 text-center animate-slide-up">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-red-500/10 text-red-400 mb-4 border border-red-500/20">
+          <AlertTriangle className="w-6 h-6" />
         </div>
-        <h1 className="text-2xl font-black uppercase tracking-tight">Room Expired</h1>
-        <p className="mt-2 text-sm text-gray-400">
-          {message || `Room ${code} has closed or has expired.`}
+        <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Room Unavailable</h1>
+        <p className="mt-2 text-xs sm:text-sm text-gray-400 leading-relaxed">
+          {message || `Room ${code} could not be reached or has closed.`}
         </p>
-        <div className="mt-6 flex flex-col gap-3">
+        <div className="mt-6 flex flex-col gap-2.5">
+          {onRetry && (
+            <button
+              onClick={onRetry}
+              className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-primary-dark transition-all shadow-[0_0_15px_var(--color-primary-glow)] cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5 mr-2" /> Try Again
+            </button>
+          )}
           <Link
             to="/games"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-bold uppercase tracking-wider text-black hover:bg-white transition-colors"
+            className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-gray-200 hover:text-white hover:bg-white/10 transition-colors"
           >
             Create New Room
           </Link>
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-full border border-white/10 px-6 py-3 text-sm font-bold text-gray-400 hover:text-white transition-colors"
+            className="inline-flex items-center justify-center rounded-xl border border-white/10 px-5 py-2 text-xs font-medium text-gray-400 hover:text-white transition-colors"
           >
             Go Home
           </Link>
@@ -203,36 +228,69 @@ function RejoinCard({
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
-  const [attemptedAuto, setAttemptedAuto] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const attemptedAutoRef = useRef(false);
 
   useEffect(() => {
     setNickname(readNickname());
   }, []);
 
   useEffect(() => {
-    if (attemptedAuto) return;
+    if (attemptedAutoRef.current) return;
     const stored = readNickname();
     if (!stored) {
-      setAttemptedAuto(true);
+      attemptedAutoRef.current = true;
       return;
     }
-    setAttemptedAuto(true);
+
+    attemptedAutoRef.current = true;
     setIsPending(true);
-    joinRoom({ data: { code, nickname: stored } })
-      .then((res) => {
+    setStatusMessage("Connecting to room…");
+
+    let isMounted = true;
+    let retries = 0;
+    const maxRetries = 3;
+
+    async function attemptAutoJoin() {
+      try {
+        const res = await joinRoom({ data: { code, nickname: stored } });
+        if (!isMounted) return;
         saveToken(res.code, res.token);
         onJoined(res.token);
-      })
-      .catch((err) => {
-        setIsPending(false);
+      } catch (err) {
+        if (!isMounted) return;
         const msg = err instanceof Error ? err.message : "";
-        if (msg.includes("expired") || msg.includes("no longer exists") || msg.includes("No room found")) {
-          onExpired?.(msg);
-        } else {
-          setError(msg);
+        // If room is still warming up or committing in Supabase, retry up to 3 times
+        if (
+          retries < maxRetries &&
+          (msg.includes("No room found") ||
+            msg.includes("Could not") ||
+            msg.includes("fetch") ||
+            msg.includes("timeout"))
+        ) {
+          retries++;
+          setStatusMessage(`Connecting to room… (attempt ${retries + 1}/${maxRetries + 1})`);
+          setTimeout(attemptAutoJoin, 700 * retries);
+          return;
         }
-      });
-  }, [code, attemptedAuto, joinRoom, onJoined, onExpired]);
+
+        // Never lock into ExpiredRoom on auto-join failure!
+        setIsPending(false);
+        setStatusMessage(null);
+        if (msg.includes("already in progress") || msg.includes("full")) {
+          setError(msg);
+        } else {
+          setError("Could not automatically connect. Tap 'Enter Room' below to join.");
+        }
+      }
+    }
+
+    attemptAutoJoin();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [code, joinRoom, onJoined]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -242,15 +300,22 @@ function RejoinCard({
       return;
     }
     setIsPending(true);
+    setStatusMessage("Entering room…");
     try {
       saveNickname(nickname.trim());
       const res = await joinRoom({ data: { code, nickname: nickname.trim() } });
       saveToken(res.code, res.token);
       onJoined(res.token);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not join.");
+      const msg = err instanceof Error ? err.message : "Could not join.";
+      if (msg.includes("expired") || msg.includes("no longer exists")) {
+        onExpired?.(msg);
+      } else {
+        setError(msg);
+      }
     } finally {
       setIsPending(false);
+      setStatusMessage(null);
     }
   }
 
@@ -265,18 +330,18 @@ function RejoinCard({
             onChange={(e) => setNickname(e.target.value)}
             placeholder="e.g. Maverick"
             maxLength={18}
-            className="h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl"
+            className="h-11 bg-white/5 border-white/10 text-white placeholder:text-gray-500 rounded-xl text-sm"
             autoFocus
           />
         </div>
         <Button
           type="submit"
-          className="mt-5 w-full font-bold uppercase tracking-wider bg-primary text-black hover:bg-white transition-colors rounded-xl"
+          className="mt-4 w-full h-11 font-black uppercase tracking-wider bg-primary text-white hover:bg-primary-dark transition-all rounded-xl text-xs sm:text-sm shadow-[0_0_15px_var(--color-primary-glow)] cursor-pointer"
           disabled={isPending}
         >
-          {isPending ? "Connecting…" : "Enter Room"}
+          {isPending ? (statusMessage || "Connecting…") : "Enter Room"}
         </Button>
-        {error && <p className="mt-3 text-xs text-red-400 text-center font-medium">{error}</p>}
+        {error && <p className="mt-3 text-xs text-red-400 text-center font-medium leading-relaxed">{error}</p>}
       </form>
     </main>
   );
@@ -933,9 +998,9 @@ function GameController({
                         playClickSound();
                         setShowInviteModal(true);
                       }}
-                      className="w-full h-14 rounded-2xl liquid-glass-primary font-black text-white text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] transition-all shadow-[0_0_24px_var(--color-primary-glow)]"
+                      className="w-full h-11 sm:h-12 rounded-xl sm:rounded-2xl liquid-glass-primary font-black text-white text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] transition-all shadow-[0_0_24px_var(--color-primary-glow)]"
                     >
-                      <UserPlus className="w-5 h-5 text-white" />
+                      <UserPlus className="w-4 h-4 text-white" />
                       <span>Invite Friends to Start</span>
                       <ArrowRight className="w-4 h-4 text-white/80" />
                     </button>
@@ -970,10 +1035,9 @@ function GameController({
                       }}
                       disabled={isActionPending}
                       variant="hero"
-                      size="xl"
-                      className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-base sm:text-lg transition-all shadow-[0_0_35px_var(--color-primary-glow)] hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+                      className="w-full h-11 sm:h-12 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm transition-all shadow-[0_0_30px_var(--color-primary-glow)] hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
                     >
-                      <Play className="w-5 h-5 fill-current" />
+                      <Play className="w-4 h-4 fill-current mr-1.5" />
                       {isActionPending ? "Starting Round..." : `Start Round ${state.round + 1}`}
                     </Button>
                   </div>
@@ -1092,7 +1156,7 @@ function GameController({
               }}
               className={`panel p-8 cursor-pointer select-none transition-all duration-300 ${
                 revealed
-                  ? "bg-primary text-black scale-105 shadow-2xl shadow-primary/30"
+                  ? "bg-primary text-white scale-105 shadow-2xl shadow-primary/30"
                   : "text-white hover:border-primary/50"
               }`}
             >
@@ -1134,10 +1198,9 @@ function GameController({
                 }}
                 disabled={isActionPending}
                 variant="hero"
-                size="xl"
-                className="w-full font-black uppercase tracking-wider disabled:opacity-50"
+                className="w-full h-11 sm:h-12 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider disabled:opacity-50 text-xs sm:text-sm shadow-[0_0_20px_var(--color-primary-glow)]"
               >
-                {isActionPending ? "Starting Discussion..." : <>Begin Discussion <ArrowRight className="w-4 h-4" /></>}
+                {isActionPending ? "Starting Discussion..." : <>Begin Discussion <ArrowRight className="w-4 h-4 ml-1" /></>}
               </Button>
             )}
           </div>
@@ -1187,10 +1250,9 @@ function GameController({
                   }}
                   disabled={isActionPending}
                   variant="hero"
-                  size="xl"
-                  className="w-full font-black uppercase tracking-wider shadow-lg shadow-primary/20 disabled:opacity-50"
+                  className="w-full h-11 sm:h-12 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider shadow-[0_0_20px_var(--color-primary-glow)] disabled:opacity-50 text-xs sm:text-sm"
                 >
-                  {isActionPending ? "Starting Voting..." : <>Start Voting Phase <ArrowRight className="w-4 h-4" /></>}
+                  {isActionPending ? "Starting Voting..." : <>Start Voting Phase <ArrowRight className="w-4 h-4 ml-1" /></>}
                 </Button>
               </div>
             )}
@@ -1332,7 +1394,10 @@ function GameController({
                       placeholder="Guess the secret word..."
                       className="bg-black/50 border-white/20 text-white"
                     />
-                    <Button type="submit" className="bg-emerald-500 text-black font-bold">
+                    <Button
+                      type="submit"
+                      className="bg-primary hover:bg-primary-dark text-white font-bold h-10 px-4 rounded-xl text-xs sm:text-sm shadow-md"
+                    >
                       Guess
                     </Button>
                   </form>
@@ -1394,10 +1459,9 @@ function GameController({
                   }}
                   disabled={isActionPending}
                   variant="hero"
-                  size="xl"
-                  className="w-full font-black uppercase tracking-wider shadow-lg shadow-primary/20 disabled:opacity-50"
+                  className="w-full h-11 sm:h-12 rounded-xl sm:rounded-2xl font-black uppercase tracking-wider shadow-[0_0_20px_var(--color-primary-glow)] disabled:opacity-50 text-xs sm:text-sm"
                 >
-                  <RotateCcw className={`w-5 h-5 ${isActionPending ? "animate-spin" : ""}`} />{" "}
+                  <RotateCcw className={`w-4 h-4 mr-2 ${isActionPending ? "animate-spin" : ""}`} />{" "}
                   {isActionPending ? "Starting Next Round..." : "Next Round"}
                 </Button>
               </div>

@@ -207,11 +207,62 @@ function generateUUID() {
   return generateSecureUUID();
 }
 
-function getMemoryRoomByToken(token: string): { room: RoomMemory; player: RoomMemory["players"][0] } {
+async function getMemoryRoomByToken(token: string): Promise<{ room: RoomMemory; player: RoomMemory["players"][0] }> {
   for (const room of memoryRooms.values()) {
     const p = room.players.find((pl) => pl.token === token);
     if (p) return { room, player: p };
   }
+
+  // If not found in current instance memory (e.g. fresh lambda container), hydrate from Supabase
+  try {
+    const { data: player } = await supabaseAdmin
+      .from("players")
+      .select("id, room_id, nickname, is_host, score, token")
+      .eq("token", token)
+      .maybeSingle();
+
+    if (player && player.room_id) {
+      const { data: room } = await supabaseAdmin
+        .from("rooms")
+        .select("id, code, phase, discussion_seconds, game_mode, current_round, phase_ends_at")
+        .eq("id", player.room_id)
+        .maybeSingle();
+
+      if (room) {
+        const { data: allPlayers } = await supabaseAdmin
+          .from("players")
+          .select("id, nickname, is_host, score, token")
+          .eq("room_id", room.id);
+
+        const memRoom: RoomMemory = {
+          id: room.id,
+          code: room.code,
+          gameMode: ((room as any).game_mode as GameMode) || "odd_one_out",
+          isGameLocked: true,
+          phase: (room.phase as Phase) || "lobby",
+          round: room.current_round || 0,
+          phaseEndsAt: room.phase_ends_at,
+          discussionSeconds: room.discussion_seconds || 60,
+          players: (allPlayers || []).map((p) => ({
+            id: p.id,
+            nickname: p.nickname,
+            token: p.token,
+            score: p.score || 0,
+            isHost: p.is_host,
+          })),
+          rounds: [],
+        };
+        memoryRooms.set(room.code, memRoom);
+        const restoredPlayer = memRoom.players.find((p) => p.token === token);
+        if (restoredPlayer) {
+          return { room: memRoom, player: restoredPlayer };
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Supabase hydration failed for token:", err);
+  }
+
   throw new Error("Your seat in this room is gone. Rejoin with the code.");
 }
 
@@ -224,46 +275,52 @@ export async function createRoom(
   const seconds = Math.min(600, Math.max(30, Math.round(discussionSeconds)));
   let code = makeCode();
 
-  try {
-    const { data: room, error } = await supabaseAdmin
-      .from("rooms")
-      .insert({ code, discussion_seconds: seconds, game_mode: gameMode } as any)
-      .select("id, code")
-      .single();
-
-    if (!error && room) {
-      const { data: player, error: playerError } = await supabaseAdmin
-        .from("players")
-        .insert({ room_id: room.id, nickname: name, is_host: true })
-        .select("id, token")
+  // Retry up to 2 times for Supabase cold-start absorption
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const { data: room, error } = await supabaseAdmin
+        .from("rooms")
+        .insert({ code, discussion_seconds: seconds, game_mode: gameMode } as any)
+        .select("id, code")
         .single();
 
-      if (!playerError && player) {
-        const memRoom: RoomMemory = {
-          id: room.id,
-          code: room.code,
-          gameMode,
-          isGameLocked: true,
-          phase: "lobby",
-          round: 0,
-          phaseEndsAt: null,
-          discussionSeconds: seconds,
-          players: [
-            {
-              id: player.id,
-              nickname: name,
-              token: player.token as string,
-              score: 0,
-              isHost: true,
-            },
-          ],
-          rounds: [],
-        };
-        memoryRooms.set(room.code, memRoom);
-        return { code: room.code, token: player.token as string };
+      if (!error && room) {
+        const { data: player, error: playerError } = await supabaseAdmin
+          .from("players")
+          .insert({ room_id: room.id, nickname: name, is_host: true })
+          .select("id, token")
+          .single();
+
+        if (!playerError && player) {
+          const memRoom: RoomMemory = {
+            id: room.id,
+            code: room.code,
+            gameMode,
+            isGameLocked: true,
+            phase: "lobby",
+            round: 0,
+            phaseEndsAt: null,
+            discussionSeconds: seconds,
+            players: [
+              {
+                id: player.id,
+                nickname: name,
+                token: player.token as string,
+                score: 0,
+                isHost: true,
+              },
+            ],
+            rounds: [],
+          };
+          memoryRooms.set(room.code, memRoom);
+          return { code: room.code, token: player.token as string };
+        }
       }
+    } catch (e) {
+      console.warn(`createRoom Supabase attempt ${attempt} error:`, e);
+      if (attempt < 2) await new Promise((r) => setTimeout(r, 300));
     }
-  } catch {}
+  }
 
   const roomId = generateUUID();
   const playerId = generateUUID();
@@ -297,6 +354,7 @@ export async function joinRoom(rawCode: string, nickname: string) {
   const code = normalizeCode(rawCode);
   const name = cleanNickname(nickname);
 
+  // 1. Check in-memory rooms first
   const mem = memoryRooms.get(code);
   if (mem) {
     if (mem.phase !== "lobby") throw new Error("That game is already in progress.");
@@ -311,19 +369,46 @@ export async function joinRoom(rawCode: string, nickname: string) {
       score: 0,
       isHost: false,
     });
+    try {
+      await supabaseAdmin.from("players").insert({
+        id: playerId,
+        room_id: mem.id,
+        nickname: name,
+        token,
+        is_host: false,
+        score: 0,
+      });
+    } catch {}
     return { code, token };
   }
 
+  // 2. Room not in memory: query Supabase with retry (up to 3 attempts with exponential backoff)
+  // This eliminates the race condition where a guest scans a QR code right as the room is being created
+  let room: any = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from("rooms")
+        .select("id, code, phase, discussion_seconds, game_mode")
+        .eq("code", code)
+        .maybeSingle();
+
+      if (data) {
+        room = data;
+        break;
+      }
+    } catch (e) {
+      console.warn(`joinRoom Supabase attempt ${attempt} error:`, e);
+    }
+    if (attempt < 3) {
+      await new Promise((resolve) => setTimeout(resolve, 350 * attempt));
+    }
+  }
+
+  if (!room) throw new Error("No room found with that code.");
+  if (room.phase !== "lobby") throw new Error("That game is already in progress.");
+
   try {
-    const { data: room } = await supabaseAdmin
-      .from("rooms")
-      .select("id, code, phase, discussion_seconds, game_mode")
-      .eq("code", code)
-      .maybeSingle();
-
-    if (!room) throw new Error("No room found with that code.");
-    if (room.phase !== "lobby") throw new Error("That game is already in progress.");
-
     const { data: player, error } = await supabaseAdmin
       .from("players")
       .insert({ room_id: room.id, nickname: name })
@@ -370,12 +455,12 @@ export async function joinRoom(rawCode: string, nickname: string) {
     return { code: room.code, token: player.token as string };
   } catch (e) {
     if (e instanceof Error) throw e;
-    throw new Error("No room found with that code.");
+    throw new Error("Could not complete joining room. Please try again.");
   }
 }
 
 export async function getState(token: string): Promise<GameState> {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
 
   if (
     (room.phase === "discuss" || room.phase === "mafia_discuss") &&
@@ -526,7 +611,7 @@ export async function startRound(
   token: string,
   custom?: { major: string; minor: string; category?: string | undefined } | null,
 ) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only the host can start the round.");
   if (room.players.length < 3) throw new Error("You need at least 3 players to start.");
 
@@ -645,7 +730,7 @@ export async function startRound(
 }
 
 export async function beginDiscussion(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only the host can start discussion.");
   room.phase = "discuss";
   room.phaseEndsAt = new Date(Date.now() + room.discussionSeconds * 1000).toISOString();
@@ -653,7 +738,7 @@ export async function beginDiscussion(token: string) {
 }
 
 export async function startVoting(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only the host can start voting.");
   room.phase = "vote";
   room.phaseEndsAt = null;
@@ -661,7 +746,7 @@ export async function startVoting(token: string) {
 }
 
 export async function castVote(token: string, targetId: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (room.phase !== "vote" && room.phase !== "mafia_vote") throw new Error("Voting is not active.");
   if (player.isDead) throw new Error("Eliminated players cannot vote.");
   const curRound = room.rounds[room.rounds.length - 1];
@@ -692,7 +777,7 @@ export async function castVote(token: string, targetId: string) {
 }
 
 export async function forceResults(token: string) {
-  const { room } = getMemoryRoomByToken(token);
+  const { room } = await getMemoryRoomByToken(token);
   const curRound = room.rounds[room.rounds.length - 1];
   if (!curRound) throw new Error("No active round.");
 
@@ -735,7 +820,7 @@ export async function forceResults(token: string) {
 }
 
 export async function guessChameleonWord(token: string, guess: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   const curRound = room.rounds[room.rounds.length - 1];
   if (!curRound) throw new Error("No active round.");
   if (player.id !== curRound.minorityPlayerId) throw new Error("Only the Chameleon can guess the word.");
@@ -765,7 +850,7 @@ export async function guessChameleonWord(token: string, guess: string) {
 }
 
 export async function nextRound(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only the host can start the next round.");
   room.phase = "lobby";
   room.phaseEndsAt = null;
@@ -773,7 +858,7 @@ export async function nextRound(token: string) {
 }
 
 export async function leaveRoom(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   room.players = room.players.filter((p) => p.id !== player.id);
   if (player.isHost && room.players.length > 0) {
     room.players[0]!.isHost = true;
@@ -782,14 +867,14 @@ export async function leaveRoom(token: string) {
 }
 
 export async function kickPlayer(token: string, targetId: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only the host can kick players.");
   room.players = room.players.filter((p) => p.id !== targetId);
   return { success: true };
 }
 
 export async function getRoomHistory(token: string) {
-  const { room } = getMemoryRoomByToken(token);
+  const { room } = await getMemoryRoomByToken(token);
   const playerMap = new Map<string, string>(room.players.map((p) => [p.id, p.nickname]));
 
   const rounds: RoundHistoryItem[] = room.rounds.map((r) => ({
@@ -825,7 +910,7 @@ export async function getPlatformStats() {
 
 // Mafia Engine
 export async function mafiaStartGame(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only the host can start Mafia.");
   if (room.players.length < 4) throw new Error("Mafia requires at least 4 players.");
 
@@ -867,7 +952,7 @@ export async function mafiaStartGame(token: string) {
 }
 
 export async function mafiaNightAction(token: string, targetId: string | null) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (room.phase !== "mafia_night") throw new Error("Night phase is not active.");
   if (!room.nightActions) room.nightActions = { mafiaTargets: {}, doctorTarget: null, policeTarget: null };
 
@@ -888,7 +973,7 @@ export async function mafiaNightAction(token: string, targetId: string | null) {
 }
 
 export async function mafiaBeginMorning(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only the host can proceed to morning.");
 
   const actions = room.nightActions;
@@ -954,7 +1039,7 @@ function checkMafiaWin(room: RoomMemory) {
 }
 
 export async function mafiaBeginDiscuss(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only host can start discussion.");
   room.phase = "mafia_discuss";
   room.phaseEndsAt = new Date(Date.now() + 120000).toISOString();
@@ -962,7 +1047,7 @@ export async function mafiaBeginDiscuss(token: string) {
 }
 
 export async function mafiaBeginVote(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only host can start voting.");
   room.phase = "mafia_vote";
   room.phaseEndsAt = new Date(Date.now() + 60000).toISOString();
@@ -984,7 +1069,7 @@ export async function mafiaCastVote(token: string, targetId: string) {
 }
 
 export async function mafiaForceVoteResults(token: string) {
-  const { room } = getMemoryRoomByToken(token);
+  const { room } = await getMemoryRoomByToken(token);
   const curRound = room.rounds[room.rounds.length - 1];
   let condemnedPlayer: { playerId: string; nickname: string; role: MafiaRole } | null = null;
 
@@ -1034,7 +1119,7 @@ export async function mafiaForceVoteResults(token: string) {
 }
 
 export async function mafiaNextNight(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only host can start next night.");
   room.round += 1;
   room.phase = "mafia_night";
@@ -1052,7 +1137,7 @@ export async function mafiaNextNight(token: string) {
 }
 
 export async function mafiaRestartGame(token: string) {
-  const { room, player } = getMemoryRoomByToken(token);
+  const { room, player } = await getMemoryRoomByToken(token);
   if (!player.isHost) throw new Error("Only host can restart game.");
   room.phase = "lobby";
   room.phaseEndsAt = null;
