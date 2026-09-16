@@ -12,7 +12,6 @@ import { useEffect, type ReactNode } from "react";
 import { Home, Gamepad2, Layers, Sparkles } from "lucide-react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BrandLogo } from "../components/BrandLogo";
 import { GlobalFooter } from "../components/GlobalFooter";
 import { CookieBanner } from "../components/CookieBanner";
@@ -41,11 +40,8 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+  console.error("Root application error:", error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black px-4 text-white">
@@ -237,7 +233,7 @@ function RootComponent() {
           {!isInRoom && <GlobalFooter />}
 
           {/* Cookie & AdSense Consent Banner */}
-          <CookieBanner />
+          <CookieBanner hasBottomNav={!isInRoom} />
 
           {/* Native-Feel Mobile App Bottom Navigation Dock */}
           {!isInRoom && (

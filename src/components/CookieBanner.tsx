@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY = "swr_cookie_consent_v1";
 
-export function CookieBanner() {
+interface CookieBannerProps {
+  hasBottomNav?: boolean;
+}
+
+export function CookieBanner({ hasBottomNav = true }: CookieBannerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -51,7 +55,11 @@ export function CookieBanner() {
     <div
       role="region"
       aria-label="Cookie and Privacy Consent"
-      className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm z-50 animate-in fade-in slide-in-from-bottom-3 duration-300"
+      className={`fixed left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm z-[60] animate-in fade-in slide-in-from-bottom-3 duration-300 ${
+        hasBottomNav
+          ? "bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] sm:bottom-6"
+          : "bottom-3 sm:bottom-6"
+      }`}
     >
       <div className="liquid-glass-card rounded-2xl border border-white/20 bg-zinc-950/90 p-3.5 sm:p-4 shadow-2xl backdrop-blur-2xl text-white">
         <div className="flex items-center justify-between gap-3 mb-2">

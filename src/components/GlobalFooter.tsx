@@ -48,6 +48,15 @@ export function GlobalFooter() {
                 </Link>
               </li>
               <li>
+                <Link
+                  to="/games/$slug"
+                  params={{ slug: "mafia" }}
+                  className="hover:text-white transition-colors"
+                >
+                  Mafia
+                </Link>
+              </li>
+              <li>
                 <Link to="/games" className="hover:text-white transition-colors">
                   Game Library
                 </Link>
