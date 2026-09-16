@@ -46,7 +46,7 @@ export function BrandLogo({
     <div className={`flex items-center gap-2.5 sm:gap-3 select-none group ${className}`}>
       {/* Brand Icon Mark */}
       <div
-        className={`relative ${iconSizes[size]} shrink-0 flex items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-transparent border border-white/15 backdrop-blur-xl shadow-[0_0_24px_-4px_oklch(85%_0.22_142_/_0.3)] transition-all duration-300 group-hover:scale-105 group-hover:border-primary/50 group-hover:shadow-[0_0_32px_-2px_oklch(85%_0.22_142_/_0.55)] overflow-hidden`}
+        className={`relative ${iconSizes[size]} shrink-0 flex items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-transparent border border-white/20 backdrop-blur-xl shadow-[0_0_24px_-4px_rgba(0,113,227,0.35)] transition-all duration-300 group-hover:scale-105 group-hover:border-primary/60 group-hover:shadow-[0_0_32px_-2px_rgba(0,113,227,0.6)] overflow-hidden`}
       >
         {/* Ambient background glow inside the icon */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent pointer-events-none" />
@@ -62,7 +62,7 @@ export function BrandLogo({
           >
             <path
               d="M20 7L32 13.5V26.5L20 33L8 26.5V13.5L20 7Z"
-              stroke="oklch(85% 0.22 142)"
+              stroke="#0071E3"
               strokeWidth="2.2"
               strokeLinejoin="round"
             />
@@ -73,8 +73,8 @@ export function BrandLogo({
               strokeWidth="1.6"
               strokeLinejoin="round"
             />
-            <circle cx="20" cy="20" r="3" fill="oklch(85% 0.22 142)" />
-            <circle cx="20" cy="20" r="1.5" fill="#0b0d14" />
+            <circle cx="20" cy="20" r="3" fill="#0071E3" />
+            <circle cx="20" cy="20" r="1.5" fill="#0B0E14" />
           </svg>
         ) : activeVariant === "minimal" ? (
           /* Variant 3: Minimal SWR Monogram Ribbon */
@@ -84,11 +84,11 @@ export function BrandLogo({
             xmlns="http://www.w3.org/2000/svg"
             className="w-[62%] h-[62%] relative z-10 transition-transform duration-300 group-hover:scale-110"
           >
-            <rect x="9" y="9" width="10" height="10" rx="3" fill="oklch(85% 0.22 142)" />
+            <rect x="9" y="9" width="10" height="10" rx="3" fill="#0071E3" />
             <rect x="21" y="9" width="10" height="10" rx="3" fill="white" fillOpacity="0.2" />
             <rect x="9" y="21" width="10" height="10" rx="3" fill="white" fillOpacity="0.2" />
-            <rect x="21" y="21" width="10" height="10" rx="3" fill="oklch(85% 0.22 142)" />
-            <circle cx="20" cy="20" r="2.5" fill="#0b0d14" />
+            <rect x="21" y="21" width="10" height="10" rx="3" fill="#0071E3" />
+            <circle cx="20" cy="20" r="2.5" fill="#0B0E14" />
           </svg>
         ) : (
           /* Variant 1 (Default): The Secret Cipher & Keyhole Aperture */
@@ -100,8 +100,8 @@ export function BrandLogo({
           >
             <defs>
               <linearGradient id="swr-neon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="oklch(95% 0.15 142)" />
-                <stop offset="100%" stopColor="oklch(82% 0.22 142)" />
+                <stop offset="0%" stopColor="#60A5FA" />
+                <stop offset="100%" stopColor="#0071E3" />
               </linearGradient>
             </defs>
 
@@ -116,11 +116,11 @@ export function BrandLogo({
 
             {/* Secret Keyhole / Deduction Iris Core */}
             <circle cx="20" cy="20" r="2.8" fill="#ffffff" />
-            <circle cx="20" cy="20" r="1.4" fill="#0d1017" />
+            <circle cx="20" cy="20" r="1.4" fill="#0B0E14" />
 
             {/* Minimalist Accent Pips */}
             <circle cx="28" cy="11.5" r="1.2" fill="#ffffff" />
-            <circle cx="8" cy="28.5" r="1.2" fill="oklch(85% 0.22 142)" />
+            <circle cx="8" cy="28.5" r="1.2" fill="#0071E3" />
           </svg>
         )}
       </div>

@@ -59,7 +59,7 @@ export function GameCard({ game }: GameCardProps) {
         </div>
         <div className="mt-2 sm:mt-4 pt-1 sm:pt-2">
           {isAvailable ? (
-            <div className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-primary py-2 sm:py-3 text-[10px] sm:text-sm font-black text-black shadow-lg shadow-primary/20 group-hover:bg-white transition-colors">
+            <div className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-primary py-2 sm:py-3 text-[10px] sm:text-sm font-black text-white shadow-lg shadow-primary/30 group-hover:bg-primary-dark transition-colors">
               <Play className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
               PLAY NOW
             </div>

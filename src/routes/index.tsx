@@ -141,7 +141,7 @@ function HomePage() {
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <Link
                 to="/games"
-                className="flex items-center justify-center gap-2 rounded-none bg-primary px-8 sm:px-10 py-4 sm:py-5 text-xs sm:text-sm font-black uppercase tracking-widest text-black transition-transform hover:scale-105"
+                className="flex items-center justify-center gap-2 rounded-none bg-primary px-8 sm:px-10 py-4 sm:py-5 text-xs sm:text-sm font-black uppercase tracking-widest text-white shadow-lg shadow-primary/30 transition-transform hover:scale-105 hover:bg-primary-dark"
               >
                 Play Now <Play className="w-4 h-4 fill-current" />
               </Link>
@@ -198,7 +198,7 @@ function HomePage() {
               <button
                 type="submit"
                 disabled={!quickCode.trim()}
-                className="flex items-center justify-center gap-1.5 bg-primary text-black px-5 py-3 font-black uppercase tracking-widest text-xs hover:bg-white transition-colors disabled:opacity-40 rounded-lg sm:rounded-none cursor-pointer"
+                className="flex items-center justify-center gap-1.5 bg-primary text-white px-5 py-3 font-black uppercase tracking-widest text-xs hover:bg-primary-dark transition-colors disabled:opacity-40 rounded-lg sm:rounded-none cursor-pointer shadow-md shadow-primary/20"
               >
                 Join <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -392,7 +392,7 @@ function HomePage() {
                 <span className="text-xs font-bold text-primary uppercase tracking-widest mb-6 block">
                   The Imposter
                 </span>
-                <div className="bg-primary text-black py-10 font-black text-3xl tracking-widest scale-110 shadow-2xl">
+                <div className="bg-primary text-white py-10 font-black text-3xl tracking-widest scale-110 shadow-2xl">
                   BANANA
                 </div>
               </div>
@@ -540,7 +540,7 @@ function HomePage() {
           >
             <Link
               to="/games"
-              className="bg-primary text-black px-8 sm:px-12 py-4 sm:py-6 font-black uppercase tracking-widest text-sm sm:text-lg hover:bg-white transition-colors shadow-[0_0_40px_-10px_var(--tw-colors-primary)]"
+              className="bg-primary text-white px-8 sm:px-12 py-4 sm:py-6 font-black uppercase tracking-widest text-sm sm:text-lg hover:bg-primary-dark transition-colors shadow-[0_0_40px_-10px_var(--tw-colors-primary)]"
             >
               Create A Room
             </Link>

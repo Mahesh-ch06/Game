@@ -76,7 +76,7 @@ export function CookieBanner() {
           <Button
             size="sm"
             onClick={() => handleConsent("all")}
-            className="bg-primary text-black hover:bg-white font-bold text-xs uppercase tracking-wider flex-1"
+            className="bg-primary text-white hover:bg-primary-dark font-bold text-xs uppercase tracking-wider flex-1"
           >
             <ShieldCheck className="w-3.5 h-3.5 mr-1" /> Accept All
           </Button>

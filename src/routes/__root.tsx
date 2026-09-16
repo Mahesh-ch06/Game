@@ -30,7 +30,7 @@ function NotFoundComponent() {
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-black transition-colors hover:bg-white"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-dark shadow-md shadow-primary/25"
           >
             Go home
           </Link>
@@ -62,7 +62,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-black transition-colors hover:bg-white cursor-pointer"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-dark cursor-pointer shadow-md shadow-primary/25"
           >
             Try again
           </button>
@@ -155,7 +155,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LogoProvider>
-        <div className="flex flex-col min-h-screen bg-transparent text-white selection:bg-primary selection:text-black">
+        <div className="flex flex-col min-h-screen bg-transparent text-white selection:bg-primary selection:text-white">
           {/* Navigation Bar */}
           <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl transition-all duration-300">
             <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
@@ -275,7 +275,7 @@ function RootComponent() {
                   to="/games"
                   className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-primary hover:text-white transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-primary text-black flex items-center justify-center font-bold shadow-[0_0_12px_var(--color-primary-glow)]">
+                  <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-[0_0_12px_var(--color-primary-glow)]">
                     <Sparkles className="w-4 h-4 fill-current" />
                   </div>
                   <span className="text-[10px] font-black tracking-wider text-primary">Play</span>

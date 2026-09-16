@@ -140,7 +140,7 @@ export function AboutPage() {
         <div className="flex flex-wrap justify-center gap-4">
           <Link
             to="/games"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-primary text-black font-black uppercase tracking-widest text-sm hover:bg-white transition-colors shadow-lg shadow-primary/20"
+            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-primary text-white font-black uppercase tracking-widest text-sm hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30"
           >
             Play Now
           </Link>

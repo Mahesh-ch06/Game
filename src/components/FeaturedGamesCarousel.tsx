@@ -55,7 +55,7 @@ export function FeaturedGamesCarousel() {
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
               aria-label="Previous Game"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-primary hover:text-black hover:border-primary active:scale-95 cursor-pointer"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-primary hover:text-white hover:border-primary active:scale-95 cursor-pointer"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -66,7 +66,7 @@ export function FeaturedGamesCarousel() {
                   onClick={() => setCurrentIndex(i)}
                   aria-label={`Go to slide ${i + 1}`}
                   className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    i === currentIndex ? "w-8 bg-primary" : "w-2.5 bg-white/20 hover:bg-white/40"
+                    i === currentIndex ? "w-8 bg-primary shadow-[0_0_10px_var(--color-primary-glow)]" : "w-2.5 bg-white/20 hover:bg-white/40"
                   }`}
                 />
               ))}
@@ -76,7 +76,7 @@ export function FeaturedGamesCarousel() {
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
               aria-label="Next Game"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-primary hover:text-black hover:border-primary active:scale-95 cursor-pointer"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all hover:bg-primary hover:text-white hover:border-primary active:scale-95 cursor-pointer"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -161,7 +161,7 @@ export function FeaturedGamesCarousel() {
                     <Link
                       to="/games/$slug"
                       params={{ slug: currentGame.slug }}
-                      className="inline-flex items-center justify-center gap-3 rounded-full bg-primary px-8 py-3.5 text-sm font-black uppercase tracking-widest text-black shadow-lg shadow-primary/25 transition-transform hover:scale-105 hover:bg-white cursor-pointer w-full sm:w-auto"
+                      className="inline-flex items-center justify-center gap-3 rounded-full bg-primary px-8 py-3.5 text-sm font-black uppercase tracking-widest text-white shadow-lg shadow-primary/30 transition-transform hover:scale-105 hover:bg-primary-dark cursor-pointer w-full sm:w-auto"
                     >
                       <Play className="w-4 h-4 fill-current" /> PLAY NOW
                     </Link>

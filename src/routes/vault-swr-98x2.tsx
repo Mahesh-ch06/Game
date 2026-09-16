@@ -300,7 +300,7 @@ function AdminRoute() {
             <button
               type="submit"
               disabled={isLoggingIn}
-              className="w-full h-11 rounded-xl bg-primary text-black font-bold text-sm tracking-wide transition-all hover:bg-white hover:shadow-[0_0_24px_var(--color-primary)] active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full h-11 rounded-xl bg-primary text-white font-bold text-sm tracking-wide transition-all hover:bg-primary-dark hover:shadow-[0_0_24px_var(--color-primary)] active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
             >
               {isLoggingIn ? (
                 <>
@@ -426,7 +426,7 @@ function AdminRoute() {
             onClick={() => setActiveTab("logo")}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shrink-0 ${
               activeTab === "logo"
-                ? "bg-primary text-black shadow-[0_0_18px_var(--color-primary-glow)]"
+                ? "bg-primary text-white shadow-[0_0_18px_var(--color-primary-glow)]"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
@@ -437,7 +437,7 @@ function AdminRoute() {
             onClick={() => setActiveTab("rooms")}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shrink-0 ${
               activeTab === "rooms"
-                ? "bg-primary text-black shadow-[0_0_18px_var(--color-primary-glow)]"
+                ? "bg-primary text-white shadow-[0_0_18px_var(--color-primary-glow)]"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
@@ -448,7 +448,7 @@ function AdminRoute() {
             onClick={() => setActiveTab("words")}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shrink-0 ${
               activeTab === "words"
-                ? "bg-primary text-black shadow-[0_0_18px_var(--color-primary-glow)]"
+                ? "bg-primary text-white shadow-[0_0_18px_var(--color-primary-glow)]"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
@@ -459,7 +459,7 @@ function AdminRoute() {
             onClick={() => setActiveTab("security")}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shrink-0 ${
               activeTab === "security"
-                ? "bg-primary text-black shadow-[0_0_18px_var(--color-primary-glow)]"
+                ? "bg-primary text-white shadow-[0_0_18px_var(--color-primary-glow)]"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
@@ -599,7 +599,7 @@ function AdminRoute() {
                   type="button"
                   disabled={isApplyingLogo || activeLogo === previewVariant}
                   onClick={() => handleApplyLogo(previewVariant)}
-                  className="w-full sm:w-auto h-12 px-8 rounded-xl bg-primary text-black font-bold text-sm tracking-wide shadow-[0_0_24px_var(--color-primary-glow)] hover:bg-white hover:shadow-[0_0_36px_var(--color-primary)] active:scale-95 disabled:opacity-40 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full sm:w-auto h-12 px-8 rounded-xl bg-primary text-white font-bold text-sm tracking-wide shadow-[0_0_24px_var(--color-primary-glow)] hover:bg-primary-dark hover:shadow-[0_0_36px_var(--color-primary)] active:scale-95 disabled:opacity-40 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isApplyingLogo ? (
                     <>
@@ -800,7 +800,7 @@ function AdminRoute() {
                   <button
                     type="submit"
                     disabled={isAddingWord}
-                    className="w-full h-[38px] rounded-xl bg-primary text-black font-bold text-xs tracking-wide hover:bg-white transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    className="w-full h-[38px] rounded-xl bg-primary text-white font-bold text-xs tracking-wide hover:bg-primary-dark transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-md shadow-primary/25"
                   >
                     <Plus className="w-4 h-4" />
                     {isAddingWord ? "Saving..." : "Add Word Pair"}

@@ -632,7 +632,7 @@ function GameController({
               playClickSound();
               setShowInviteModal(true);
             }}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-primary/40 bg-primary/15 px-3.5 py-2 text-xs font-bold text-primary hover:bg-primary hover:text-black transition-all cursor-pointer shadow-[0_0_12px_var(--color-primary-glow)]"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-primary/40 bg-primary/15 px-3.5 py-2 text-xs font-bold text-primary hover:bg-primary hover:text-white transition-all cursor-pointer shadow-[0_0_12px_var(--color-primary-glow)]"
             title="Invite & QR Code"
           >
             <QrCode className="w-3.5 h-3.5" />
@@ -933,11 +933,11 @@ function GameController({
                         playClickSound();
                         setShowInviteModal(true);
                       }}
-                      className="w-full h-14 rounded-2xl liquid-glass-primary font-black text-black text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] transition-all shadow-[0_0_24px_var(--color-primary-glow)]"
+                      className="w-full h-14 rounded-2xl liquid-glass-primary font-black text-white text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] transition-all shadow-[0_0_24px_var(--color-primary-glow)]"
                     >
-                      <UserPlus className="w-5 h-5 text-black" />
+                      <UserPlus className="w-5 h-5 text-white" />
                       <span>Invite Friends to Start</span>
-                      <ArrowRight className="w-4 h-4 text-black/70" />
+                      <ArrowRight className="w-4 h-4 text-white/80" />
                     </button>
                   </div>
                 ) : (
@@ -1052,9 +1052,9 @@ function GameController({
             <div className="space-y-2.5">
               <button
                 onClick={copyLink}
-                className="w-full h-12 rounded-2xl liquid-glass-primary font-black text-black text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_0_20px_var(--color-primary-glow)] cursor-pointer"
+                className="w-full h-12 rounded-2xl liquid-glass-primary font-black text-white text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_0_20px_var(--color-primary-glow)] cursor-pointer"
               >
-                {copied ? <Check className="w-4 h-4 text-black" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4" />}
                 {copied ? "Link Copied to Clipboard!" : "Copy Invite Link"}
               </button>
 

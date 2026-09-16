@@ -191,7 +191,7 @@ export function ContactPage() {
                 <Button
                   type="submit"
                   size="xl"
-                  className="w-full font-black uppercase tracking-wider bg-primary text-black hover:bg-white transition-colors"
+                  className="w-full font-black uppercase tracking-wider bg-primary text-white hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30"
                 >
                   <Send className="w-4 h-4 mr-2" /> Send Message
                 </Button>
