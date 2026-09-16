@@ -777,7 +777,7 @@ function HomePage() {
                 How do I contact support or suggest new word categories?
               </AccordionTrigger>
               <AccordionContent className="text-sm text-gray-300 leading-relaxed pt-2">
-                We love community input! You can submit word suggestions or report issues via our <Link to="/contact" className="text-primary underline">Contact Page</Link> or by sending an email directly to <a href="mailto:support@secretwordroom.com" className="text-primary underline">support@secretwordroom.com</a>.
+                We love community input! You can submit word suggestions or report issues via our <Link to="/contact" className="text-primary underline">Contact Page</Link> or by sending an email directly to <a href="mailto:codeversestudio8@gmail.com" className="text-primary underline">codeversestudio8@gmail.com</a>.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

@@ -181,7 +181,7 @@ export function PrivacyPage() {
             If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at:
           </p>
           <p className="font-mono text-primary">
-            Email: <a href="mailto:support@secretwordroom.com" className="underline">support@secretwordroom.com</a>
+            Email: <a href="mailto:codeversestudio8@gmail.com" className="underline">codeversestudio8@gmail.com</a>
           </p>
           <p className="text-xs text-gray-500">
             Website: <a href="https://secret-word-room.vercel.app" className="underline">https://secret-word-room.vercel.app</a>

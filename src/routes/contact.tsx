@@ -64,10 +64,10 @@ export function ContactPage() {
               <div>
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Direct Email</h3>
                 <a
-                  href="mailto:support@secretwordroom.com"
+                  href="mailto:codeversestudio8@gmail.com"
                   className="text-white font-bold hover:text-primary transition-colors text-sm sm:text-base"
                 >
-                  support@secretwordroom.com
+                  codeversestudio8@gmail.com
                 </a>
                 <p className="text-xs text-gray-400 mt-1">For account, technical, or publisher inquiries.</p>
               </div>

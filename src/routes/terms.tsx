@@ -123,8 +123,8 @@ export function TermsPage() {
           </h2>
           <p>
             For any inquiries or legal notices regarding these Terms, please email:{" "}
-            <a href="mailto:support@secretwordroom.com" className="text-primary underline">
-              support@secretwordroom.com
+            <a href="mailto:codeversestudio8@gmail.com" className="text-primary underline">
+              codeversestudio8@gmail.com
             </a>
           </p>
         </section>
