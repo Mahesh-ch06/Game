@@ -601,10 +601,10 @@ function GameController({
       <div className="fixed bottom-12 right-1/4 w-[450px] h-[350px] bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10" />
 
       {/* Top Header Bar */}
-      <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-card/60 border border-white/15 p-4 rounded-2xl backdrop-blur-xl mb-6 sm:mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+      <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 liquid-glass-card border border-white/15 p-4 rounded-2xl backdrop-blur-xl mb-6 sm:mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
         <div className="flex items-center gap-3">
           {/* Room Code Badge */}
-          <div className="rounded-xl bg-white/[0.06] border border-white/15 px-3.5 py-1.5 flex items-center gap-2 shadow-inner">
+          <div className="rounded-xl liquid-glass border border-white/15 px-3.5 py-1.5 flex items-center gap-2 shadow-inner">
             <span className="text-[11px] text-gray-400 font-bold tracking-wider uppercase">CODE:</span>
             <span className="font-mono text-lg font-black tracking-widest text-primary drop-shadow-[0_0_8px_var(--color-primary-glow)]">
               {code}
@@ -619,14 +619,14 @@ function GameController({
           </div>
 
           {/* Mode Pill Badge */}
-          <span className="rounded-full bg-primary/15 border border-primary/40 px-3 py-1 text-xs font-black uppercase text-primary flex items-center gap-1.5 shadow-[0_0_12px_var(--color-primary-glow)]">
+          <span className="liquid-glass-pill rounded-full border border-primary/40 px-3 py-1 text-xs font-black uppercase text-primary flex items-center gap-1.5 shadow-[0_0_12px_var(--color-primary-glow)]">
             <Sparkles className="w-3 h-3 animate-pulse" />
             {state.gameMode === "chameleon" ? "Word Chameleon" : "Odd One Out"}
           </span>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
+        <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 sm:gap-2.5">
           <button
             onClick={() => {
               playClickSound();
@@ -678,51 +678,28 @@ function GameController({
       {state.phase === "lobby" && (
         <div className="mt-6 space-y-6 animate-in fade-in duration-300">
           {/* Game Mode Showcase Banner */}
-          <div className="panel p-5 sm:p-6 relative overflow-hidden backdrop-blur-2xl border border-white/15 shadow-[0_12px_36px_rgba(0,0,0,0.5)]">
+          <div className="liquid-glass-card p-5 sm:p-7 relative overflow-hidden rounded-3xl border border-white/15 shadow-[0_16px_48px_rgba(0,0,0,0.6)]">
             <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none select-none text-8xl">
               {state.gameMode === "chameleon" ? "🦎" : "🕵️"}
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
               <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-primary/20 text-primary border border-primary/40 px-3 py-1 text-[11px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[0_0_12px_var(--color-primary-glow)]">
+                <div className="flex items-center gap-2">
+                  <span className="liquid-glass-pill rounded-full px-3.5 py-1 text-[11px] font-black uppercase tracking-widest flex items-center gap-1.5 text-primary border border-primary/40 shadow-[0_0_14px_var(--color-primary-glow)]">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                    </span>
                     {state.gameMode === "chameleon" ? "🦎 Word Chameleon" : "🕵️ Odd One Out"}
                   </span>
-
-                  {/* Host Mode Quick Switcher */}
-                  {isHost && (
-                    <div className="flex items-center gap-1 bg-white/[0.06] border border-white/10 rounded-full p-0.5">
-                      <button
-                        type="button"
-                        onClick={() => handleSwitchMode("odd_one_out")}
-                        disabled={switchingMode || state.gameMode === "odd_one_out"}
-                        className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
-                          state.gameMode === "odd_one_out"
-                            ? "bg-primary text-black shadow-sm"
-                            : "text-gray-400 hover:text-white"
-                        }`}
-                      >
-                        Odd One Out
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleSwitchMode("chameleon")}
-                        disabled={switchingMode || state.gameMode === "chameleon"}
-                        className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
-                          state.gameMode === "chameleon"
-                            ? "bg-primary text-black shadow-sm"
-                            : "text-gray-400 hover:text-white"
-                        }`}
-                      >
-                        Chameleon
-                      </button>
-                    </div>
-                  )}
+                  <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-gray-400 liquid-glass px-2.5 py-0.5 rounded-full border border-white/10">
+                    Active Game
+                  </span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-black text-white font-display tracking-tight">
-                  {state.gameMode === "chameleon" ? "The Word Chameleon" : "Odd One Out Room"}
+                <h2 className="text-2xl sm:text-3xl font-black text-white font-display tracking-tight mt-1">
+                  {state.gameMode === "chameleon" ? "Word Chameleon Room" : "Odd One Out Room"}
                 </h2>
 
                 <p className="text-xs sm:text-sm text-gray-300 max-w-xl leading-relaxed">
@@ -733,23 +710,23 @@ function GameController({
 
                 {/* 3-Step Visual Gameplay Guide */}
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3 text-center text-[10px] sm:text-xs">
-                  <div className="rounded-xl bg-white/[0.04] border border-white/10 p-2.5">
+                  <div className="rounded-2xl liquid-glass p-2.5 sm:p-3 border border-white/10 shadow-sm">
                     <span className="text-primary font-black block mb-0.5">1. Secret Clue</span>
-                    <span className="text-gray-400">Words assigned</span>
+                    <span className="text-gray-300">Words assigned</span>
                   </div>
-                  <div className="rounded-xl bg-white/[0.04] border border-white/10 p-2.5">
+                  <div className="rounded-2xl liquid-glass p-2.5 sm:p-3 border border-white/10 shadow-sm">
                     <span className="text-primary font-black block mb-0.5">2. Clue Giving</span>
-                    <span className="text-gray-400">Give 1-word hints</span>
+                    <span className="text-gray-300">Give 1-word hints</span>
                   </div>
-                  <div className="rounded-xl bg-white/[0.04] border border-white/10 p-2.5">
+                  <div className="rounded-2xl liquid-glass p-2.5 sm:p-3 border border-white/10 shadow-sm">
                     <span className="text-primary font-black block mb-0.5">3. Deduction</span>
-                    <span className="text-gray-400">Vote out imposter</span>
+                    <span className="text-gray-300">Vote out imposter</span>
                   </div>
                 </div>
               </div>
 
               <div className="shrink-0 flex sm:flex-col items-center gap-2">
-                <span className="text-xs font-bold text-gray-300 bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl text-center">
+                <span className="text-xs font-bold text-gray-300 liquid-glass border border-white/15 px-3.5 py-2 rounded-xl text-center shadow-sm">
                   Min 3 Players
                 </span>
                 <span className="text-[11px] text-gray-500 font-mono">Max 16</span>
@@ -779,7 +756,7 @@ function GameController({
             </div>
 
             {/* Minimum Players Readiness Progress Meter */}
-            <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-3.5 mb-4 shadow-inner">
+            <div className="rounded-2xl liquid-glass p-3.5 mb-4 shadow-inner border border-white/15">
               <div className="flex items-center justify-between text-xs font-bold mb-2">
                 <span className="text-gray-300 flex items-center gap-2">
                   <Radio className="w-3.5 h-3.5 text-primary animate-pulse" />
@@ -795,12 +772,12 @@ function GameController({
                   </span>
                 )}
               </div>
-              <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+              <div className="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
                 <div
                   className={`h-full transition-all duration-500 rounded-full ${
                     state.players.length >= 3
                       ? "bg-gradient-to-r from-primary to-emerald-400 shadow-[0_0_12px_var(--color-primary)]"
-                      : "bg-gradient-to-r from-amber-500 to-amber-400"
+                      : "bg-gradient-to-r from-amber-500 to-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
                   }`}
                   style={{ width: `${Math.min(100, (state.players.length / 3) * 100)}%` }}
                 />
@@ -814,8 +791,8 @@ function GameController({
                   key={p.id}
                   className={`flex items-center justify-between rounded-2xl border p-3.5 backdrop-blur-md transition-all ${
                     p.id === state.me.id
-                      ? "border-primary/60 bg-primary/10 shadow-[0_0_20px_var(--color-primary-glow)] ring-1 ring-primary/40"
-                      : "panel"
+                      ? "liquid-glass border-primary/50 bg-primary/10 shadow-[0_0_20px_var(--color-primary-glow)] ring-1 ring-primary/40"
+                      : "liquid-glass-card border-white/10"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -872,7 +849,7 @@ function GameController({
                       playClickSound();
                       setShowInviteModal(true);
                     }}
-                    className="flex items-center justify-between rounded-2xl border-2 border-dashed border-white/20 p-3.5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-primary/60 transition-all cursor-pointer group"
+                    className="flex items-center justify-between rounded-2xl border-2 border-dashed border-white/20 p-3.5 liquid-glass hover:bg-white/[0.06] hover:border-primary/60 transition-all cursor-pointer group"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 group-hover:text-primary group-hover:border-primary/50 transition-colors">
@@ -898,7 +875,7 @@ function GameController({
                         playClickSound();
                         setShowInviteModal(true);
                       }}
-                      className="flex items-center justify-between rounded-2xl border-2 border-dashed border-white/10 p-3.5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-primary/40 transition-all cursor-pointer group"
+                      className="flex items-center justify-between rounded-2xl border-2 border-dashed border-white/15 p-3.5 liquid-glass hover:bg-white/[0.05] hover:border-primary/40 transition-all cursor-pointer group"
                     >
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-500 group-hover:text-primary transition-colors">
@@ -919,114 +896,151 @@ function GameController({
                 </>
               )}
             </ul>
-
-            {/* Live Sonar Pulse Banner */}
-            {state.players.length < 3 && (
-              <div className="mt-4 flex items-center justify-center gap-2.5 py-3 px-4 rounded-2xl bg-primary/5 border border-primary/20 text-xs text-gray-300 backdrop-blur-md">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary" />
-                </span>
-                <span>
-                  Room <strong className="text-primary font-mono tracking-wider">{code}</strong> is active. Share the code or invite link to start!
-                </span>
-              </div>
-            )}
           </div>
 
-          {/* Host Start Button & Quick Actions */}
-          {isHost ? (
-            <div className="pt-2 space-y-3">
-              <Button
-                onClick={async () => {
-                  if (isActionPending) return;
-                  setIsActionPending(true);
-                  try {
-                    playClickSound();
-                    await startRound({ data: { token } });
-                  } finally {
-                    setIsActionPending(false);
-                  }
-                }}
-                disabled={state.players.length < 3 || isActionPending}
-                variant="hero"
-                size="xl"
-                className={`w-full font-black uppercase tracking-widest text-base sm:text-lg transition-all h-14 ${
-                  state.players.length >= 3
-                    ? "shadow-[0_0_30px_var(--color-primary-glow)] hover:scale-[1.01] cursor-pointer"
-                    : "opacity-45 cursor-not-allowed"
-                }`}
-              >
-                <Play className="w-5 h-5 fill-current" />
-                {isActionPending
-                  ? "Starting Round..."
-                  : state.players.length < 3
-                  ? `Waiting for ${3 - state.players.length} More Player(s)`
-                  : `Start Round ${state.round + 1}`}
-              </Button>
+          {/* Mobile-Friendly Sticky Action Dock with Liquid Glass */}
+          <div className="sticky bottom-3 sm:static z-30 pt-2 pb-safe">
+            <div className="liquid-glass-card rounded-3xl p-3.5 sm:p-5 border border-white/20 shadow-[0_16px_48px_rgba(0,0,0,0.75)] backdrop-blur-2xl">
+              {isHost ? (
+                state.players.length < 3 ? (
+                  /* Waiting State for Host (< 3 Players) */
+                  <div className="space-y-3">
+                    {/* Status Pill with live pulse and player counter */}
+                    <div className="liquid-glass rounded-2xl px-4 py-3 border border-amber-500/25 bg-amber-500/[0.05] flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="relative flex h-3 w-3 shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-400" />
+                        </span>
+                        <div className="truncate">
+                          <p className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5 truncate">
+                            Waiting for {3 - state.players.length} more player{3 - state.players.length > 1 ? "s" : ""}
+                          </p>
+                          <p className="text-[11px] text-gray-400 truncate">
+                            Min 3 required • Room code: <span className="font-mono text-primary font-bold">{code}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <span className="liquid-glass-pill px-2.5 py-1 rounded-lg text-xs font-mono font-black text-amber-300 border border-amber-500/30 shrink-0">
+                        {state.players.length}/3
+                      </span>
+                    </div>
 
-              {state.players.length < 3 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    playClickSound();
-                    setShowInviteModal(true);
-                  }}
-                  className="w-full py-3 px-4 rounded-xl border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-[0_0_12px_var(--color-primary-glow)]"
-                >
-                  <Share2 className="w-4 h-4" />
-                  Invite Friends via QR Code or Link
-                </button>
+                    {/* Primary Mobile-Friendly Invite CTA Button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playClickSound();
+                        setShowInviteModal(true);
+                      }}
+                      className="w-full h-14 rounded-2xl liquid-glass-primary font-black text-black text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] transition-all shadow-[0_0_24px_var(--color-primary-glow)]"
+                    >
+                      <UserPlus className="w-5 h-5 text-black" />
+                      <span>Invite Friends to Start</span>
+                      <ArrowRight className="w-4 h-4 text-black/70" />
+                    </button>
+                  </div>
+                ) : (
+                  /* Ready State for Host (>= 3 Players) */
+                  <div className="space-y-3">
+                    {/* Ready Banner */}
+                    <div className="liquid-glass rounded-2xl px-4 py-2.5 border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span className="text-xs sm:text-sm font-bold text-emerald-300">
+                          Room ready! {state.players.length} players joined.
+                        </span>
+                      </div>
+                      <span className="text-[11px] font-mono text-emerald-400/80 font-bold">
+                        Ready
+                      </span>
+                    </div>
+
+                    {/* Launch Round Button */}
+                    <Button
+                      onClick={async () => {
+                        if (isActionPending) return;
+                        setIsActionPending(true);
+                        try {
+                          playClickSound();
+                          await startRound({ data: { token } });
+                        } finally {
+                          setIsActionPending(false);
+                        }
+                      }}
+                      disabled={isActionPending}
+                      variant="hero"
+                      size="xl"
+                      className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-base sm:text-lg transition-all shadow-[0_0_35px_var(--color-primary-glow)] hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+                    >
+                      <Play className="w-5 h-5 fill-current" />
+                      {isActionPending ? "Starting Round..." : `Start Round ${state.round + 1}`}
+                    </Button>
+                  </div>
+                )
+              ) : (
+                /* Non-Host State */
+                <div className="text-center py-3 space-y-2">
+                  <div className="inline-flex items-center justify-center gap-2 text-gray-200 font-bold text-sm">
+                    <Clock className="w-4 h-4 text-primary animate-pulse" />
+                    <span>Waiting for host to start the round…</span>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    {state.players.length < 3
+                      ? `Room needs at least 3 players (${state.players.length}/3 joined)`
+                      : "All set! Host can start at any moment."}
+                  </p>
+                  {state.players.length < 3 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playClickSound();
+                        setShowInviteModal(true);
+                      }}
+                      className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl liquid-glass border border-primary/30 text-primary font-bold text-xs hover:bg-primary/10 transition-all cursor-pointer"
+                    >
+                      <Share2 className="w-3.5 h-3.5" /> Invite More Players
+                    </button>
+                  )}
+                </div>
               )}
             </div>
-          ) : (
-            <div className="panel p-6 text-center space-y-2">
-              <p className="text-gray-300 font-bold text-sm flex items-center justify-center gap-2">
-                <Clock className="w-4 h-4 text-primary animate-pulse" />
-                Waiting for host to start the round…
-              </p>
-              <p className="text-xs text-gray-400">
-                {state.players.length < 3
-                  ? `Room needs at least 3 players (${state.players.length}/3 joined)`
-                  : "All set! Host can start at any moment."}
-              </p>
-            </div>
-          )}
+          </div>
         </div>
       )}
 
       {/* Interactive Invite Modal with QR Code */}
       {showInviteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="panel w-full max-w-sm border border-white/15 rounded-3xl p-6 sm:p-7 relative shadow-[0_0_60px_rgba(0,0,0,0.9)] text-center">
+          <div className="liquid-glass-card w-full max-w-sm border border-white/20 rounded-3xl p-6 sm:p-7 relative shadow-[0_0_60px_rgba(0,0,0,0.9)] text-center">
             <button
               onClick={() => setShowInviteModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white p-1 rounded-full bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+              className="absolute top-4 right-4 text-gray-400 hover:text-white p-1.5 rounded-full liquid-glass hover:bg-white/10 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center mx-auto mb-3 text-primary shadow-[0_0_20px_var(--color-primary-glow)]">
+            <div className="w-12 h-12 rounded-2xl liquid-glass border border-primary/40 flex items-center justify-center mx-auto mb-3 text-primary shadow-[0_0_20px_var(--color-primary-glow)]">
               <QrCode className="w-6 h-6" />
             </div>
 
             <h3 className="text-xl font-black text-white font-display">Invite Friends</h3>
-            <p className="text-xs text-gray-400 mt-1 mb-4">
+            <p className="text-xs text-gray-300 mt-1 mb-4">
               Scan with any mobile phone camera or share the direct link.
             </p>
 
             {/* Room Code Callout */}
-            <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3 mb-4">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-gray-400 block mb-1">
+            <div className="rounded-2xl liquid-glass border border-white/15 p-3 mb-4">
+              <span className="text-[10px] uppercase font-mono tracking-widest text-gray-400 block mb-1 font-bold">
                 ROOM PASSCODE
               </span>
-              <span className="font-mono text-3xl font-black tracking-widest text-primary drop-shadow-[0_0_10px_var(--color-primary-glow)]">
+              <span className="font-mono text-3xl font-black tracking-widest text-primary drop-shadow-[0_0_12px_var(--color-primary-glow)]">
                 {code}
               </span>
             </div>
 
             {/* Scannable QR Code */}
-            <div className="p-3 bg-slate-900 border border-white/10 rounded-2xl inline-block mx-auto mb-4 shadow-inner">
+            <div className="p-3.5 bg-slate-950/80 border border-white/15 rounded-2xl inline-block mx-auto mb-4 shadow-inner">
               <img
                 src={qrUrl}
                 alt={`QR code to join room ${code}`}
@@ -1038,7 +1052,7 @@ function GameController({
             <div className="space-y-2.5">
               <button
                 onClick={copyLink}
-                className="w-full h-11 rounded-xl bg-primary text-black font-bold text-sm flex items-center justify-center gap-2 hover:bg-white transition-all shadow-[0_0_16px_var(--color-primary-glow)] cursor-pointer"
+                className="w-full h-12 rounded-2xl liquid-glass-primary font-black text-black text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_0_20px_var(--color-primary-glow)] cursor-pointer"
               >
                 {copied ? <Check className="w-4 h-4 text-black" /> : <Copy className="w-4 h-4" />}
                 {copied ? "Link Copied to Clipboard!" : "Copy Invite Link"}
@@ -1050,7 +1064,7 @@ function GameController({
                 )}`}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full h-10 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
+                className="w-full h-11 rounded-2xl liquid-glass border border-white/15 hover:bg-white/10 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
               >
                 Share via WhatsApp
               </a>

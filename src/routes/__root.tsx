@@ -215,12 +215,14 @@ function RootComponent() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Link
-                    to="/games"
-                    className="inline-flex h-9 sm:h-10 items-center justify-center rounded-full bg-white px-4 sm:px-6 text-xs sm:text-sm font-bold text-black transition-transform duration-300 hover:scale-105 hover:bg-gray-200 shrink-0"
-                  >
-                    PLAY NOW
-                  </Link>
+                  {!isInRoom && (
+                    <Link
+                      to="/games"
+                      className="inline-flex h-9 sm:h-10 items-center justify-center rounded-full bg-white px-4 sm:px-6 text-xs sm:text-sm font-bold text-black transition-transform duration-300 hover:scale-105 hover:bg-gray-200 shrink-0"
+                    >
+                      PLAY NOW
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
