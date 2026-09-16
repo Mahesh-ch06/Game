@@ -55,7 +55,15 @@ function getAdminPassword(): string {
   return process.env["ADMIN_PASSWORD"] || "secretadmin2026";
 }
 
-const SESSION_SECRET = crypto.randomBytes(32).toString("hex");
+function getSessionSecret(): string {
+  const seed =
+    process.env["ADMIN_SESSION_SECRET"] ||
+    process.env["ADMIN_PASSWORD"] ||
+    process.env["SUPABASE_SERVICE_ROLE_KEY"] ||
+    "swr_admin_session_vault_persistent_seed_2026";
+
+  return crypto.createHash("sha256").update(`swr-admin-vault:${seed}`).digest("hex");
+}
 
 export function verifyAdminPassword(password: string): boolean {
   const adminSecret = getAdminPassword();
@@ -70,12 +78,13 @@ export function verifyAdminPassword(password: string): boolean {
   return crypto.timingSafeEqual(inputBuffer, targetBuffer);
 }
 
-// Issue HMAC-signed session token for admin dashboard (valid for 24h)
+// Issue HMAC-signed session token for admin dashboard (valid for 7 days)
 export function createAdminSessionToken(): string {
-  const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
+  const secret = getSessionSecret();
+  const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000;
   const payload = `admin:${expiresAt}`;
   const hmac = crypto
-    .createHmac("sha256", SESSION_SECRET)
+    .createHmac("sha256", secret)
     .update(payload)
     .digest("hex");
   const encodedPayload = Buffer.from(payload).toString("base64url");
@@ -98,8 +107,9 @@ export function verifyAdminSessionToken(token: string | null | undefined): boole
     const expiresAt = parseInt(expiresStr, 10);
     if (isNaN(expiresAt) || expiresAt < Date.now()) return false;
 
+    const secret = getSessionSecret();
     const expectedHmac = crypto
-      .createHmac("sha256", SESSION_SECRET)
+      .createHmac("sha256", secret)
       .update(payload)
       .digest("hex");
 

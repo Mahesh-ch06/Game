@@ -87,7 +87,7 @@ export async function getActiveLogo(): Promise<LogoVariant> {
  */
 export async function loginAdmin(password: string, clientIp = "client"): Promise<{ sessionToken: string }> {
   const rateKey = `admin_login:${clientIp}`;
-  const rateCheck = checkRateLimit(rateKey, 5, 15 * 60 * 1000); // 5 attempts per 15 min
+  const rateCheck = checkRateLimit(rateKey, 25, 10 * 60 * 1000); // 25 attempts per 10 min
 
   if (!rateCheck.allowed) {
     logSecurityEvent(

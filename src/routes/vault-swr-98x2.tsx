@@ -46,7 +46,10 @@ function AdminRoute() {
   // Auth state
   const [sessionToken, setSessionToken] = useState<string | null>(() => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem("swr_admin_session");
+      return (
+        localStorage.getItem("swr_admin_session") ||
+        sessionStorage.getItem("swr_admin_session")
+      );
     }
     return null;
   });
@@ -99,6 +102,7 @@ function AdminRoute() {
       setRooms(roomsData || []);
       setWordPairs(wordsData || []);
     } catch (err: any) {
+      console.error("[Admin] loadDashboard error:", err);
       if (err?.message?.includes("Unauthorized")) {
         handleLogout();
       }
@@ -120,12 +124,12 @@ function AdminRoute() {
     try {
       const res = await adminLoginFn({ data: { password } });
       if (res?.sessionToken) {
-        setSessionToken(res.sessionToken);
         if (typeof window !== "undefined") {
+          localStorage.setItem("swr_admin_session", res.sessionToken);
           sessionStorage.setItem("swr_admin_session", res.sessionToken);
         }
         setPassword("");
-        loadDashboard(res.sessionToken);
+        setSessionToken(res.sessionToken);
       }
     } catch (err: any) {
       setLoginError(err?.message || "Invalid credentials. Access denied.");
@@ -140,6 +144,7 @@ function AdminRoute() {
     setRooms([]);
     setWordPairs([]);
     if (typeof window !== "undefined") {
+      localStorage.removeItem("swr_admin_session");
       sessionStorage.removeItem("swr_admin_session");
     }
   };
